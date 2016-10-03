@@ -1,0 +1,8 @@
+.cask*
+ac-comphist.dat
+smex-items
+projectile-bookmarks.eld
+auto-save-list/
+.mc-lists.el
+ido.last*
+projectile.cache
