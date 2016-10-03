@@ -28,6 +28,7 @@
 (load-local "defuns")
 (load-local "keybindings")
 (load-local "default-black-theme")
+(load-local "iuscheme")
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;     Preferences     ;;;;;;;;;;;;;;;;;
@@ -421,7 +422,7 @@
 ;; --------------------------------------------------
 
 ;; C/C++ mode settings
-(setq-default c-basic-offset 4 c-default-style "linux")
+(setq-default c-basic-offset 2 c-default-style "linux")
 ;; (setq-default tab-width 4 indent-tabs-mode t)
 (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 (setq mf--source-file-extension "cpp")
