@@ -235,8 +235,6 @@
                     js2-mode-hook))
       (add-hook hook (lambda () (paxedit-mode 1))))))
 
-(use-package geiser)
-
 ;; clojure utils
 
 (use-package cider

@@ -32,7 +32,6 @@
 (depends-on "avy")
 (depends-on "ivy")
 (depends-on "swiper")
-(depends-on "geiser")
 
 ;; better looking
 (depends-on "sml-modeline")
