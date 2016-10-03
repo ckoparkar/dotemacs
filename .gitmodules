@@ -1,0 +1,6 @@
+[submodule "site-lisp/cider"]
+	path = site-lisp/cider
+	url = https://github.com/clojure-emacs/cider
+[submodule "site-lisp/clj-refactor.el"]
+	path = site-lisp/clj-refactor.el
+	url = https://github.com/clojure-emacs/clj-refactor.el
