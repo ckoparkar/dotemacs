@@ -304,6 +304,9 @@
 (use-package restclient
   :mode (("\\.rest\\'" . restclient-mode)))
 
+(use-package racket-mode
+  :config (define-key racket-repl-mode-map "\r" 'scheme-return))
+
 (use-package js2-mode
   :init
   (progn

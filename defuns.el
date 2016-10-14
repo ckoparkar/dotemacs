@@ -145,5 +145,16 @@ point reaches the beginning or end of the buffer, stop there."
     (when (= orig-point (point))
       (move-beginning-of-line 1))))
 
+(defun racket-scratch ()
+  "Create/switch to a scratch buffer for Racket."
+  (interactive)
+  (let ((buf (get-buffer-create "*racket-scratch*")))
+    (switch-to-buffer buf)
+    (racket-mode)
+    (save-excursion
+      (goto-char (point-min))
+      (unless (looking-at-p "#")
+        (insert "#lang racket\n\n")))))
+
 (provide 'defuns)
 ;;; defuns.el ends here
