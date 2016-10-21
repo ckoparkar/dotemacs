@@ -156,5 +156,17 @@ point reaches the beginning or end of the buffer, stop there."
       (unless (looking-at-p "#")
         (insert "#lang racket\n\n")))))
 
+(defun responsible-whitespace ()
+  (interactive)
+  (mapc (lambda (x)
+          (add-hook 'before-save-hook x))
+        '(clean-up-buffer-or-region whitespace-cleanup)))
+
+(defun unresponsible-whitespace ()
+  (interactive)
+  (mapc (lambda (x)
+          (remove-hook 'before-save-hook x))
+        '(clean-up-buffer-or-region whitespace-cleanup)))
+
 (provide 'defuns)
 ;;; defuns.el ends here
