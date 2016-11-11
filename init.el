@@ -436,3 +436,35 @@
 ;; Smartparens
 (add-hook 'c++-mode-hook (lambda () (smartparens-mode 1)))
 (add-hook 'c-mode-hook (lambda () (smartparens-mode 1)))
+
+;; --------------------------------------------------
+;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
+;; --------------------------------------------------
+
+(load-file (let ((coding-system-for-read 'utf-8))
+             (shell-command-to-string "agda-mode locate")))
+
+(defvar c-agda-unicode
+  '(("\\bn" "ℕ")
+    ("\\bb" "𝔹")
+    ("\\bl" "𝕃")
+    ("\\bs" "S")
+    ("\\bt" "T")
+    ("\\bv" "𝕍")
+    ("\\cv" "O")
+    ("\\comp" " ")
+    ("\\m" "ÞÑ")
+    ("\\om" "ω")))
+
+(use-package agda-mode
+  :init (progn
+          (setq agda2-highlight-face-groups 'default-faces)
+          (eval-after-load "quail/latin-ltx"
+            '(mapc (lambda (pair)
+                     (quail-defrule (car pair) (cadr pair) "Agda"))
+                   c-agda-unicode))
+          (add-hook 'agda2-mode-hook
+                    (lambda ()
+                      (disable-theme 'default-black)
+                      (enable-theme 'default-black)
+                      (set-face-attribute 'default nil :font "Monaco-12")))))
