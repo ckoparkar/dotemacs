@@ -168,5 +168,28 @@ point reaches the beginning or end of the buffer, stop there."
           (remove-hook 'before-save-hook x))
         '(clean-up-buffer-or-region whitespace-cleanup)))
 
+(defun disable-arrow-keys ()
+  "Disable arrow-keys"
+  (interactive)
+  (global-unset-key (kbd "<up>"))
+  (global-unset-key (kbd "<down>"))
+  (global-unset-key (kbd "<left>"))
+  (global-unset-key (kbd "<right>")))
+
+(defun enable-arrow-keys ()
+  "Enable arrow keys."
+  (interactive)
+  (global-set-key (kbd "<up>") 'previous-line)
+  (global-set-key (kbd "<down>") 'next-line)
+  (global-set-key (kbd "<right>") 'right-char)
+  (global-set-key (kbd "<left>") 'left-char)))
+
+(defun edit-init-el ()
+  "Open my init.el file."
+  (find-file "~/.emacs.d/init.el"))
+
+(fset 'let*->set!
+      [?\C-= ?\C-x ?\C-m ?m ?c ?/ ?m ?a ?r ?k ?- ?a ?l ?l ?\C-n return ?\[ return ?\C-g ?s ?e ?t ?! ?  ?\C-b ?\C-b ?\C-b ?\C-b ?\C-b ?\C-b ?\C-c ?\C-p ?\C-c ?\C-p ?\C-g ?\C-c ?\C-s ?s ?\C-w ?b ?e ?g ?i ?n ?  ?\C-x ?\C-s])
+
 (provide 'defuns)
 ;;; defuns.el ends here

@@ -1,9 +1,3 @@
-;; Dont use this
-(global-unset-key (kbd "<up>"))
-(global-unset-key (kbd "<down>"))
-(global-unset-key (kbd "<left>"))
-(global-unset-key (kbd "<right>"))
-
 ;; Change ALT key seq
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 (global-set-key (kbd "C-c C-m") 'execute-extended-command)
