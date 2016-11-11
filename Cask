@@ -34,8 +34,6 @@
 (depends-on "swiper")
 
 ;; better looking
-(depends-on "sml-modeline")
-(depends-on "nyan-mode")
 (depends-on "highlight-parentheses")
 
 ;; IDO completion

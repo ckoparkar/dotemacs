@@ -137,14 +137,6 @@
   :config
   :bind ("C-s" . swiper))
 
-;; better looking
-
-(use-package sml-modeline
-  :init (sml-modeline-mode))
-
-(use-package nyan-mode
-  :init (nyan-mode 1))
-
 ;; IDO completion
 
 (use-package ido
