@@ -43,7 +43,7 @@
  ((eq system-type 'darwin)
   (load-theme 'default-black t)
   (exec-path-from-shell-initialize)
-  (set-face-attribute 'default nil :font "Monaco-14"))
+  (set-face-attribute 'default nil :font "Monaco-12"))
 
  (t
   (load-file "~/.emacs.d/modeline-no-window.el")
