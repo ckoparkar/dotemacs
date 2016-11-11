@@ -177,7 +177,8 @@
 (defvar c-sp-keymap
   (let ((map (make-sparse-keymap))
         (forward-map (make-sparse-keymap))
-        (backward-map (make-sparse-keymap)))
+        (backward-map (make-sparse-keymap))
+        (transpose-map (make-sparse-keymap)))
     (define-key map (kbd "r") #'sp-raise-sexp)
     (define-key map (kbd "s") #'sp-splice-sexp)
     ;; a keymap to hold forward* keybindings
@@ -188,6 +189,10 @@
     (define-key map (kbd "b") backward-map)
     (define-key backward-map (kbd "s") #'sp-backward-slurp-sexp)
     (define-key backward-map (kbd "b") #'sp-backward-barf-sexp)
+    ;; ;; paxedit transpose
+    (define-key map (kbd "t") transpose-map)
+    (define-key transpose-map (kbd "b") #'paxedit-transpose-backward)
+    (define-key transpose-map (kbd "f") #'paxedit-transpose-forward)
     map))
 
 (use-package smartparens
@@ -209,7 +214,8 @@
                     haskell-mode-hook
                     js2-mode-hook
                     racket-repl-mode-hook
-                    racket-mode-hook))
+                    racket-mode-hook
+                    agda2-mode-hook))
       (add-hook hook (lambda () (smartparens-mode 1))))))
 
 (use-package paxedit
