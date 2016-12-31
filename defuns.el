@@ -2,6 +2,8 @@
 ;;
 ;; Exports custom utility functions
 
+(require 'cl)
+
 (defun duplicate-line()
   (interactive)
   (move-beginning-of-line 1)
@@ -182,7 +184,7 @@ point reaches the beginning or end of the buffer, stop there."
   (global-set-key (kbd "<up>") 'previous-line)
   (global-set-key (kbd "<down>") 'next-line)
   (global-set-key (kbd "<right>") 'right-char)
-  (global-set-key (kbd "<left>") 'left-char)))
+  (global-set-key (kbd "<left>") 'left-char))
 
 (defun edit-init-el ()
   "Open my init.el file."
