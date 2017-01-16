@@ -309,7 +309,8 @@
             (put 'run 'racket-indent-function 2)
             (put 'run* 'racket-indent-function 1)
             (put 'conde 'racket-indent-function 0)
-            (put 'union-case 'racket-indent-function 2)))
+            (put 'union-case 'racket-indent-function 2)
+            (put 'pmatch 'racket-indent-function 1)))
 
 (use-package js2-mode
   :init
@@ -323,9 +324,16 @@
 (use-package idris-mode
   :init
   (add-hook 'idris-mode-hook
-            '(lambda ()
-               (remove-hook 'before-save-hook 'whitespace-cleanup)
-               (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
+            (lambda ()
+              (remove-hook 'before-save-hook 'whitespace-cleanup)
+              (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
+
+(use-package haskell-mode
+  :init
+  (progn
+    (add-hook 'haskell-mode-hook #'interactive-haskell-mode)
+    ;; https://github.com/haskell/haskell-mode/issues/1455
+    (setq haskell-process-args-stack-ghci '("--ghci-options=-ferror-spans"))))
 
 ;; Misc stuff
 
