@@ -301,6 +301,7 @@
   :mode (("\\.rest\\'" . restclient-mode)))
 
 (use-package racket-mode
+  :mode (("\\.rkt\\'" . racket-mode) ("\\.gib\\'" . racket-mode))
   :config (progn
             (define-key racket-repl-mode-map "\r" 'scheme-return)
             (put 'fresh 'racket-indent-function 1)
@@ -308,7 +309,8 @@
             (put 'run* 'racket-indent-function 1)
             (put 'conde 'racket-indent-function 0)
             (put 'union-case 'racket-indent-function 2)
-            (put 'pmatch 'racket-indent-function 1)))
+            (put 'pmatch 'racket-indent-function 1)
+            (put 'go-on 'racket-indent-function 1)))
 
 (use-package js2-mode
   :init
