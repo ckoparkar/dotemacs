@@ -328,10 +328,18 @@
               (remove-hook 'before-save-hook 'whitespace-cleanup)
               (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
 
+(use-package intero)
+
+(use-package shm)
+
 (use-package haskell-mode
-  :init
+  :config
   (progn
-    (add-hook 'haskell-mode-hook #'interactive-haskell-mode)
+    (add-hook 'haskell-mode-hook 'intero-mode)
+    (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+    (define-key haskell-mode-map (kbd "M-n") #'flycheck-next-error)
+    (define-key haskell-mode-map (kbd "M-p") #'flycheck-previous-error)
+    (setq haskell-ask-also-kill-buffers nil)
     ;; https://github.com/haskell/haskell-mode/issues/1455
     (setq haskell-process-args-stack-ghci '("--ghci-options=-ferror-spans"))))
 

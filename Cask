@@ -32,6 +32,8 @@
 (depends-on "avy")
 (depends-on "ivy")
 (depends-on "swiper")
+(depends-on "intero")
+(depends-on "shm")
 
 ;; better looking
 (depends-on "highlight-parentheses")
