@@ -38,16 +38,14 @@
 (cond
  ((memq window-system '(x))
   (load-theme 'default-black t)
-  (set-face-attribute 'default nil :font "Monaco-12"))
+  (set-face-attribute 'default nil :font "Monaco-11"))
 
  ((eq system-type 'darwin)
   (load-theme 'default-black t)
   (exec-path-from-shell-initialize)
   (set-face-attribute 'default nil :font "Monaco-12"))
 
- (t
-  (load-file "~/.emacs.d/modeline-no-window.el")
-  (turn-on-xclip)))
+ (t (load-theme 'default-black t)))
 
 ;; programming utils
 (use-package company
