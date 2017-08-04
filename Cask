@@ -20,7 +20,6 @@
 (depends-on "expand-region")
 (depends-on "undo-tree")
 (depends-on "exec-path-from-shell")
-(depends-on "rustfmt")
 (depends-on "xclip")
 (depends-on "inf-ruby")
 (depends-on "rvm")
@@ -53,6 +52,8 @@
 
 ;; major modes
 (depends-on "clojure-mode")
+(depends-on "cider")
+(depends-on "clj-refactor")
 (depends-on "go-mode")
 (depends-on "haskell-mode")
 (depends-on "ruby-mode")
@@ -69,17 +70,3 @@
 (depends-on "js2-mode")
 (depends-on "cask-mode")
 (depends-on "idris-mode")
-
-
-;; evil stuff
-;; (depends-on "bind-key")
-;; (depends-on "drag-stuff")
-;; (depends-on "popwin")
-;; (depends-on "web-mode")
-
-;; (depends-on "pkg-info")
-;; (depends-on "epl")
-;; (depends-on "iy-go-to-char")
-;; (depends-on "magit-filenotify")
-;; (depends-on "ghc")
-;; (depends-on "prodigy")

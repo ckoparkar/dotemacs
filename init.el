@@ -10,10 +10,6 @@
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
 
-;; Setup load path
-(add-to-list 'load-path "/Users/chaitanya/.emacs.d/site-lisp/cider")
-(add-to-list 'load-path "/Users/chaitanya/.emacs.d/site-lisp/clj-refactor.el")
-
 (require 'cider)
 (require 'clj-refactor)
 (require 'cc-mode)
@@ -336,7 +332,6 @@
   :config
   (progn
     (add-hook 'haskell-mode-hook 'intero-mode)
-    (add-hook 'haskell-mode-hook 'structured-haskell-mode)
     (define-key haskell-mode-map (kbd "M-n") #'flycheck-next-error)
     (define-key haskell-mode-map (kbd "M-p") #'flycheck-previous-error)
     (setq haskell-ask-also-kill-buffers nil)
@@ -443,7 +438,7 @@
 ;; --------------------------------------------------
 
 ;; C/C++ mode settings
-(setq-default c-basic-offset 2 c-default-style "linux")
+(setq-default c-basic-offset 4 c-default-style "linux")
 ;; (setq-default tab-width 4 indent-tabs-mode t)
 (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 (setq mf--source-file-extension "cpp")
@@ -484,3 +479,6 @@
                       (disable-theme 'default-black)
                       (enable-theme 'default-black)
                       (set-face-attribute 'default nil :font "Monaco-12")))))
+
+;; LLVM
+(load-file "~/.emacs.d/site-lisp/llvm-mode.el")
