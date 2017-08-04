@@ -61,3 +61,9 @@
                       (smex-initialize))
                   (global-set-key (kbd "C-x C-m") 'smex)
                   (smex)))
+
+;; Bindings for Atreus
+(global-set-key (kbd "C-c q") 'delete-other-windows)
+(global-set-key (kbd "C-c w") 'split-window-below)
+(global-set-key (kbd "C-c e") 'split-window-right)
+(global-set-key (kbd "C-c r") 'delete-window)
