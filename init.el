@@ -86,8 +86,6 @@
 
 (use-package exec-path-from-shell)
 
-(use-package rustfmt)
-
 (use-package xclip)
 
 (use-package inf-ruby
