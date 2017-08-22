@@ -23,7 +23,6 @@
 
 (load-local "defuns")
 (load-local "keybindings")
-(load-local "default-black-theme")
 (load-local "iuscheme")
 
 ;; --------------------------------------------------
@@ -255,7 +254,11 @@
 (use-package clojure-mode
   :mode (("\\.clj\\'" . clojure-mode)
          ("\\.cljx\\'" . clojure-mode)
-         ("\\.cljs\\'" . clojure-mode)))
+         ("\\.cljs\\'" . clojure-mode))
+  :config (progn
+            ;; korma macros
+            (put-clojure-indent 'select 1)
+            (put-clojure-indent 'insert 1)))
 
 (use-package go-mode
   :config
@@ -330,11 +333,21 @@
   :config
   (progn
     (add-hook 'haskell-mode-hook 'intero-mode)
+    (add-hook 'haskell-mode-hook 'haskell-style)
     (define-key haskell-mode-map (kbd "M-n") #'flycheck-next-error)
     (define-key haskell-mode-map (kbd "M-p") #'flycheck-previous-error)
     (setq haskell-ask-also-kill-buffers nil)
     ;; https://github.com/haskell/haskell-mode/issues/1455
     (setq haskell-process-args-stack-ghci '("--ghci-options=-ferror-spans"))))
+
+(defun haskell-style ()
+  "Sets the current buffer to use Haskell Style. Meant to be
+  added to `haskell-mode-hook'"
+  (interactive)
+  (setq tab-width 4
+        haskell-indentation-layout-offset 2
+        haskell-indentation-left-offset 2
+        haskell-indentation-ifte-offset 2))
 
 ;; Misc stuff
 
@@ -378,7 +391,7 @@
 ;; 80 columns is wide enough
 ;; http://stackoverflow.com/questions/18855510/have-emacs-highlight-characters-over-80/18855782#18855782
 (require 'whitespace)
-(setq whitespace-line-column 80) ;; limit line length
+(setq whitespace-line-column 100) ;; limit line length
 (setq whitespace-style '(face lines-tail))
 (add-hook 'prog-mode-hook 'whitespace-mode)
 
@@ -450,8 +463,8 @@
 ;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
 ;; --------------------------------------------------
 
-(load-file (let ((coding-system-for-read 'utf-8))
-             (shell-command-to-string "agda-mode locate")))
+;; (load-file (let ((coding-system-for-read 'utf-8))
+;;              (shell-command-to-string "agda-mode locate")))
 
 (defvar c-agda-unicode
   '(("\\bn" "ℕ")
@@ -465,18 +478,32 @@
     ("\\m" "ÞÑ")
     ("\\om" "ω")))
 
-(use-package agda-mode
-  :init (progn
-          (setq agda2-highlight-face-groups 'default-faces)
-          (eval-after-load "quail/latin-ltx"
-            '(mapc (lambda (pair)
-                     (quail-defrule (car pair) (cadr pair) "Agda"))
-                   c-agda-unicode))
-          (add-hook 'agda2-mode-hook
-                    (lambda ()
-                      (disable-theme 'default-black)
-                      (enable-theme 'default-black)
-                      (set-face-attribute 'default nil :font "Monaco-12")))))
+;; (use-package agda-mode
+;;   :init (progn
+;;           (setq agda2-highlight-face-groups 'default-faces)
+;;           (eval-after-load "quail/latin-ltx"
+;;             '(mapc (lambda (pair)
+;;                      (quail-defrule (car pair) (cadr pair) "Agda"))
+;;                    c-agda-unicode))
+;;           (add-hook 'agda2-mode-hook
+;;                     (lambda ()
+;;                       (disable-theme 'default-black)
+;;                       (enable-theme 'default-black)
+;;                       (set-face-attribute 'default nil :font "Monaco-12")))))
 
 ;; LLVM
 (load-file "~/.emacs.d/site-lisp/llvm-mode.el")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("9527feeeec43970b1d725bdc04e97eb2b03b15be982ac50089ad223d3c6f2920" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
