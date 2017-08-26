@@ -33,14 +33,12 @@
 (cond
  ((memq window-system '(x))
   (load-theme 'default-black t)
-  (set-face-attribute 'default nil :font "Monaco-11"))
+  (set-face-attribute 'default nil :font "Monaco-12"))
 
  ((eq system-type 'darwin)
   (load-theme 'default-black t)
   (exec-path-from-shell-initialize)
-  (set-face-attribute 'default nil :font "Monaco-12"))
-
- (t (load-theme 'default-black t)))
+  (set-face-attribute 'default nil :font "Monaco-12")))
 
 ;; programming utils
 (use-package company
@@ -81,7 +79,10 @@
   :bind ("C-=" . er/expand-region))
 
 (use-package undo-tree
-  :config (key-chord-define-global "uu" 'undo-tree-visualize))
+  :config (progn
+            (define-key undo-tree-map (kbd "C-x u") nil)
+            (global-undo-tree-mode)
+            (key-chord-define-global "uu" 'undo-tree-visualize)))
 
 (use-package exec-path-from-shell)
 
