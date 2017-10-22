@@ -328,7 +328,11 @@
               (remove-hook 'before-save-hook 'whitespace-cleanup)
               (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
 
-(use-package intero)
+(use-package intero
+  :config
+  (progn
+    (setq intero-whitelist '("~/chai/tree-velocity/gibbon-compiler"
+                             "~/chai/tree-velocity-master/gibbon-compiler"))))
 
 (use-package shm)
 
@@ -348,9 +352,11 @@
   added to `haskell-mode-hook'"
   (interactive)
   (setq tab-width 4
-        haskell-indentation-layout-offset 2
-        haskell-indentation-left-offset 2
-        haskell-indentation-ifte-offset 2))
+        haskell-indentation-layout-offset 4
+        haskell-indentation-left-offset 4
+        haskell-indentation-starter-offset 4
+        haskell-indentation-where-pre-offset 2
+        haskell-indentation-where-post-offset 4))
 
 ;; Misc stuff
 
