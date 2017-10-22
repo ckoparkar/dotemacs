@@ -47,7 +47,9 @@
 (use-package multiple-cursors
   :defer t
   :bind (("M->" . mc/mark-next-like-this)
+         ("C-." . mc/mark-next-like-this)
          ("M-<" . mc/mark-previous-like-this)
+         ("C-," . mc/mark-previous-like-this)
          ("C-x ." . mc/mark-all-like-this)
          ("C-x /" . mc/edit-lines)))
 
