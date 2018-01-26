@@ -4,13 +4,17 @@
 
 (require 'cl)
 
-(defun duplicate-line()
+(defun duplicate-line ()
+  "Clone line at cursor, leaving the latter intact."
   (interactive)
-  (move-beginning-of-line 1)
-  (kill-line)
-  (yank)
-  (newline)
-  (yank))
+  (save-excursion
+    (let ((kill-read-only-ok t) deactivate-mark)
+      (toggle-read-only 1)
+      (kill-whole-line)
+      (toggle-read-only 0)
+      (yank)
+      ;; otherwise this line "kills" ;-), the first entry in the ring
+      (setq kill-ring (reverse (cdr kill-ring))))))
 
 (defun comment-dwim-line (&optional arg)
   "Replacement for the comment-dwim command. If no region is selected and current line is not blank and we are not at the end of the line, then comment current line. Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line."
