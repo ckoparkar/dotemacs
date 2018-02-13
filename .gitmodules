@@ -1,0 +1,4 @@
+[submodule "site-lisp/cider"]
+	path = site-lisp/cider
+	url = https://github.com/clojure-emacs/cider.git
+	branch = master
