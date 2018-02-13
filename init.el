@@ -10,8 +10,9 @@
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
 
+(add-to-list 'load-path "~/.emacs.d/site-lisp/cider")
+
 (require 'cider)
-(require 'clj-refactor)
 (require 'cc-mode)
 (require 'use-package)
 (require 'dash)
@@ -496,9 +497,6 @@
      '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
      '(agda2-highlight-record-face ((t (:foreground "light blue"))))
      '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))))
-
-
-
 
 ;; LLVM
 (load-file "~/.emacs.d/site-lisp/llvm-mode.el")

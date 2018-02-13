@@ -6,3 +6,5 @@ auto-save-list/
 .mc-lists.el
 ido.last*
 projectile.cache
+elpa
+eshell
