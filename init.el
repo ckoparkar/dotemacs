@@ -274,8 +274,7 @@
 (use-package feature-mode
   :mode (("\.feature$" . feature-mode)))
 
-(use-package rust-mode
-  :init (add-hook 'rust-mode-hook #'rustfmt-enable-on-save))
+(use-package rust-mode)
 
 (use-package lua-mode
   :mode (("\\.lua\\'" . lua-mode)))
@@ -324,14 +323,15 @@
   :config
   (progn
     (setq intero-whitelist '("~/chai/tree-velocity/gibbon-compiler"
-                             "~/chai/tree-velocity-master/gibbon-compiler"))))
+                             "~/chai/tree-velocity-master/gibbon-compiler"))
+    (setq intero-blacklist '("/"))
+    (intero-global-mode)))
 
 (use-package shm)
 
 (use-package haskell-mode
   :config
   (progn
-    (add-hook 'haskell-mode-hook 'intero-mode)
     (add-hook 'haskell-mode-hook 'haskell-style)
     (define-key haskell-mode-map (kbd "M-n") #'flycheck-next-error)
     (define-key haskell-mode-map (kbd "M-p") #'flycheck-previous-error)
