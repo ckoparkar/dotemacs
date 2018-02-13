@@ -53,7 +53,6 @@
 ;; major modes
 (depends-on "clojure-mode")
 (depends-on "cider")
-(depends-on "clj-refactor")
 (depends-on "go-mode")
 (depends-on "haskell-mode")
 (depends-on "ruby-mode")

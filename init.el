@@ -242,14 +242,6 @@
     (define-key cider-repl-mode-map (kbd "M-n") 'cider-repl-forward-input))
   :bind (("C-c r". cider-repl-reset)))
 
-(use-package clj-refactor
-  :init
-  (progn
-    (add-hook 'clojure-mode-hook
-              (lambda ()
-                (clj-refactor-mode 1)
-                (cljr-add-keybindings-with-prefix "C-c C-m")))))
-
 (use-package 4clojure)
 
 ;; major modes
