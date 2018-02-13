@@ -392,7 +392,7 @@
 ;; 80 columns is wide enough
 ;; http://stackoverflow.com/questions/18855510/have-emacs-highlight-characters-over-80/18855782#18855782
 (require 'whitespace)
-(setq whitespace-line-column 100) ;; limit line length
+(setq whitespace-line-column 200) ;; limit line length
 (setq whitespace-style '(face lines-tail))
 (add-hook 'prog-mode-hook 'whitespace-mode)
 
@@ -464,8 +464,8 @@
 ;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
 ;; --------------------------------------------------
 
-;; (load-file (let ((coding-system-for-read 'utf-8))
-;;              (shell-command-to-string "agda-mode locate")))
+(load-file (let ((coding-system-for-read 'utf-8))
+             (shell-command-to-string "agda-mode locate")))
 
 (defvar c-agda-unicode
   '(("\\bn" "ℕ")
@@ -479,18 +479,26 @@
     ("\\m" "ÞÑ")
     ("\\om" "ω")))
 
-;; (use-package agda-mode
-;;   :init (progn
-;;           (setq agda2-highlight-face-groups 'default-faces)
-;;           (eval-after-load "quail/latin-ltx"
-;;             '(mapc (lambda (pair)
-;;                      (quail-defrule (car pair) (cadr pair) "Agda"))
-;;                    c-agda-unicode))
-;;           (add-hook 'agda2-mode-hook
-;;                     (lambda ()
-;;                       (disable-theme 'default-black)
-;;                       (enable-theme 'default-black)
-;;                       (set-face-attribute 'default nil :font "Monaco-12")))))
+(use-package agda-mode
+  :config
+  (progn
+    (custom-set-faces
+     '(agda2-highlight-coinductive-constructor-face ((t (:foreground "#aaffcc"))))
+     '(agda2-highlight-datatype-face ((t (:foreground "light blue"))))
+     '(agda2-highlight-field-face ((t (:foreground "#ff99cc"))))
+     '(agda2-highlight-function-face ((t (:foreground "#66ccff"))))
+     '(agda2-highlight-inductive-constructor-face ((t (:foreground "#ccffaa"))))
+     '(agda2-highlight-keyword-face ((t (:foreground "#ffaa00"))))
+     '(agda2-highlight-module-face ((t (:foreground "#ffaaff"))))
+     '(agda2-highlight-number-face ((t (:foreground "light green"))))
+     '(agda2-highlight-postulate-face ((t (:foreground "#ff7766"))))
+     '(agda2-highlight-primitive-face ((t (:foreground "#66ccff"))))
+     '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
+     '(agda2-highlight-record-face ((t (:foreground "light blue"))))
+     '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))))
+
+
+
 
 ;; LLVM
 (load-file "~/.emacs.d/site-lisp/llvm-mode.el")
