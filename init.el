@@ -323,6 +323,7 @@
 (use-package intero
   :config
   (progn
+    (setq intero-package-version "0.1.26")
     (setq intero-whitelist '("~/chai/tree-velocity/gibbon-compiler"
                              "~/chai/tree-velocity-master/gibbon-compiler"))
     (setq intero-blacklist '("/"))
@@ -480,10 +481,9 @@
     ("\\m" "ÞÑ")
     ("\\om" "ω")))
 
-(use-package agda-mode
-  :config
-  (progn
-    (custom-set-faces
+(use-package agda-mode)
+
+(custom-set-faces
      '(agda2-highlight-coinductive-constructor-face ((t (:foreground "#aaffcc"))))
      '(agda2-highlight-datatype-face ((t (:foreground "light blue"))))
      '(agda2-highlight-field-face ((t (:foreground "#ff99cc"))))
@@ -496,7 +496,7 @@
      '(agda2-highlight-primitive-face ((t (:foreground "#66ccff"))))
      '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
      '(agda2-highlight-record-face ((t (:foreground "light blue"))))
-     '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))))
+     '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))
 
 ;; LLVM
 (load-file "~/.emacs.d/site-lisp/llvm-mode.el")
