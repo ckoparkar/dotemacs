@@ -28,6 +28,7 @@
 (global-set-key (kbd "C-x ;") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-c C-s") 'crux-swap-windows)
 (global-set-key (kbd "C-c da") 'smartparens-dedent-all)
+(global-set-key (kbd "C-c hl") 'haskell-insert-language-pragma-at-point)
 
 ;; Enable smex, enhancement for M-x
 (global-set-key (kbd "M-x")

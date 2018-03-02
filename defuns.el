@@ -7,14 +7,14 @@
 (defun duplicate-line ()
   "Clone line at cursor, leaving the latter intact."
   (interactive)
-  (save-excursion
-    (let ((kill-read-only-ok t) deactivate-mark)
-      (toggle-read-only 1)
-      (kill-whole-line)
-      (toggle-read-only 0)
-      (yank)
-      ;; otherwise this line "kills" ;-), the first entry in the ring
-      (setq kill-ring (reverse (cdr kill-ring))))))
+  (let ((kill-read-only-ok t) deactivate-mark)
+    (toggle-read-only 1)
+    (kill-whole-line)
+    (toggle-read-only 0)
+    (yank)
+    ;; otherwise this line "kills" ;-), the first entry in the ring
+    (setq kill-ring (reverse (cdr kill-ring)))
+    (backward-char)))
 
 (defun comment-dwim-line (&optional arg)
   "Replacement for the comment-dwim command. If no region is selected and current line is not blank and we are not at the end of the line, then comment current line. Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line."
@@ -196,6 +196,11 @@ point reaches the beginning or end of the buffer, stop there."
 
 (fset 'let*->set!
       [?\C-= ?\C-x ?\C-m ?m ?c ?/ ?m ?a ?r ?k ?- ?a ?l ?l ?\C-n return ?\[ return ?\C-g ?s ?e ?t ?! ?  ?\C-b ?\C-b ?\C-b ?\C-b ?\C-b ?\C-b ?\C-c ?\C-p ?\C-c ?\C-p ?\C-g ?\C-c ?\C-s ?s ?\C-w ?b ?e ?g ?i ?n ?  ?\C-x ?\C-s])
+
+(defun haskell-insert-language-pragma-at-point ()
+  (interactive)
+  (insert "{-# LANGUAGE  #-}")
+  (backward-char 4))
 
 (provide 'defuns)
 ;;; defuns.el ends here
