@@ -264,8 +264,7 @@
       (setq gofmt-command "goimports")
       (setq tab-width 8 indent-tabs-mode 1))
 
-    (add-hook 'go-mode-hook 'csk-go-mode-hooks)
-    (add-hook 'before-save-hook 'gofmt-before-save)))
+    (add-hook 'go-mode-hook 'csk-go-mode-hooks)))
 
 (use-package ruby-mode
   :init
@@ -329,6 +328,13 @@
     (setq intero-blacklist '("/"))
     (intero-global-mode)))
 
+(use-package dante
+  :ensure t
+  :after haskell-mode
+  :commands 'dante-mode
+  :init
+  (add-hook 'dante-mode-hook 'flycheck-mode))
+
 (use-package shm)
 
 (use-package haskell-mode
@@ -350,7 +356,7 @@
         haskell-indentation-left-offset 4
         haskell-indentation-starter-offset 4
         haskell-indentation-where-pre-offset 2
-        haskell-indentation-where-post-offset 4))
+        haskell-indentation-where-post-offset 2))
 
 ;; Misc stuff
 

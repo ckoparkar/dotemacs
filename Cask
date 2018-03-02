@@ -32,6 +32,7 @@
 (depends-on "ivy")
 (depends-on "swiper")
 (depends-on "intero")
+(depends-on "dante")
 (depends-on "shm")
 
 ;; better looking
