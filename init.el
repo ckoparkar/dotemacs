@@ -449,6 +449,17 @@
       `((".*" ,temporary-file-directory t)))
 
 
+;; Org mode truncates lines
+
+(setq org-startup-truncated nil)
+
+
+;; Make `clean-up-buffer-or-region` configurable.
+(defcustom auto-indent-free-modes
+  `(org-mode c-mode agda2-mode)
+  "The `clean-up-buffer-or-region` won't change the indentation for these modes."
+  :type 'list)
+
 ;; safe local variables
 (setq safe-local-variable-values '((checkdoc-package-keywords-flag)
                                    (bug-reference-bug-regexp . "#\\(?2:[[:digit:]]+\\)")))
