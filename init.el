@@ -366,7 +366,7 @@
     (highlight-parentheses-mode t)))
 (global-highlight-parentheses-mode t)
 
-;; setup linum
+;; Setup linum
 (make-face 'linum-face)
 (set-face-attribute 'linum-face nil
                     :foreground "#718c00"
@@ -374,27 +374,27 @@
 (setq linum-format (propertize "%4d  " 'face 'linum-face))
 (global-linum-mode 1)
 
-;; enable y/n answers
+;; Enable y/n answers
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; delete the selection with a keypress
+;; Delete the selection with a keypress
 ;; If you enable Delete Selection mode, a minor mode, then inserting text while the mark is active causes the selected text to be deleted first. This also deactivates the mark. Many graphical applications follow this convention, but Emacs does not.
 (delete-selection-mode t)
 
-;; revert buffers automatically when underlying files are changed externally
+;; Revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode t)
 
 ;; Newline at end of file
 (setq require-final-newline t)
 
-;; more useful frame title, that show either a file or a
+;; More useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
 (setq frame-title-format
       '((:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
 
-;; remap left-command key to alt in mac
+;; Remap left-command key to alt in mac
 (setq ns-command-modifier 'meta)
 
 ;; 80 columns is wide enough
@@ -404,18 +404,18 @@
 (setq whitespace-style '(face lines-tail))
 (add-hook 'prog-mode-hook 'whitespace-mode)
 
-;; other
+;; Other
 (setq-default indent-tabs-mode nil)
 (blink-cursor-mode 0)
 
-;; set auto-scroll off in shell mode
+;; Set auto-scroll off in shell mode
 (remove-hook 'comint-output-filter-functions
              'comint-postoutput-scroll-to-bottom)
 
-;; hide minor modes emacs
+;; Hide minor modes emacs
 (add-hook 'after-change-major-mode-hook 'clean-mode-line)
 
-;; responsible white space
+;; Responsible white space
 (add-hook 'before-save-hook 'whitespace-cleanup)
 (add-hook 'before-save-hook 'clean-up-buffer-or-region)
 
@@ -423,7 +423,7 @@
 (setq ring-bell-function 'ignore)
 (setq column-number-mode 1)
 
-;; clean GUI
+;; Clean GUI
 (mapc
  (lambda (mode)
    (when (fboundp mode)
@@ -483,8 +483,7 @@
 ;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
 ;; --------------------------------------------------
 
-(load-file (let ((coding-system-for-read 'utf-8))
-             (shell-command-to-string "agda-mode locate")))
+(load-file "/home/cskksc/.cabal/share/x86_64-linux-ghc-8.2.2/Agda-2.5.3/emacs-mode/agda2.el")
 
 (defvar c-agda-unicode
   '(("\\bn" "ℕ")
@@ -501,19 +500,19 @@
 (use-package agda-mode)
 
 (custom-set-faces
-     '(agda2-highlight-coinductive-constructor-face ((t (:foreground "#aaffcc"))))
-     '(agda2-highlight-datatype-face ((t (:foreground "light blue"))))
-     '(agda2-highlight-field-face ((t (:foreground "#ff99cc"))))
-     '(agda2-highlight-function-face ((t (:foreground "#66ccff"))))
-     '(agda2-highlight-inductive-constructor-face ((t (:foreground "#ccffaa"))))
-     '(agda2-highlight-keyword-face ((t (:foreground "#ffaa00"))))
-     '(agda2-highlight-module-face ((t (:foreground "#ffaaff"))))
-     '(agda2-highlight-number-face ((t (:foreground "light green"))))
-     '(agda2-highlight-postulate-face ((t (:foreground "#ff7766"))))
-     '(agda2-highlight-primitive-face ((t (:foreground "#66ccff"))))
-     '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
-     '(agda2-highlight-record-face ((t (:foreground "light blue"))))
-     '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))
+ '(agda2-highlight-coinductive-constructor-face ((t (:foreground "#aaffcc"))))
+ '(agda2-highlight-datatype-face ((t (:foreground "light blue"))))
+ '(agda2-highlight-field-face ((t (:foreground "#ff99cc"))))
+ '(agda2-highlight-function-face ((t (:foreground "#66ccff"))))
+ '(agda2-highlight-inductive-constructor-face ((t (:foreground "#ccffaa"))))
+ '(agda2-highlight-keyword-face ((t (:foreground "#ffaa00"))))
+ '(agda2-highlight-module-face ((t (:foreground "#ffaaff"))))
+ '(agda2-highlight-number-face ((t (:foreground "light green"))))
+ '(agda2-highlight-postulate-face ((t (:foreground "#ff7766"))))
+ '(agda2-highlight-primitive-face ((t (:foreground "#66ccff"))))
+ '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
+ '(agda2-highlight-record-face ((t (:foreground "light blue"))))
+ '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))
 
 ;; LLVM
 (load-file "~/.emacs.d/site-lisp/llvm-mode.el")
