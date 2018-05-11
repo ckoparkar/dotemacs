@@ -323,8 +323,6 @@
   :config
   (progn
     (setq intero-package-version "0.1.26")
-    (setq intero-whitelist '("~/chai/tree-velocity/gibbon-compiler"
-                             "~/chai/tree-velocity-master/gibbon-compiler"))
     (setq intero-blacklist '("/"))
     (intero-global-mode)))
 
