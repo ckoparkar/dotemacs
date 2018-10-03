@@ -322,7 +322,9 @@
 (use-package intero
   :config
   (progn
-    (setq intero-package-version "0.1.26")
+    (setq intero-package-version "0.1.32")
+    ;; (setq intero-whitelist '("~/chai/tree-velocity/gibbon-compiler"))
+    (setq intero-whitelist '())
     (setq intero-blacklist '("/"))
     (intero-global-mode)))
 
@@ -331,9 +333,16 @@
   :after haskell-mode
   :commands 'dante-mode
   :init
-  (add-hook 'dante-mode-hook 'flycheck-mode))
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  :config
+  (progn
+    (setq dante-repl-command-line-methods-alist
+          `((new-build . ,(lambda (root) (when (or (directory-files root nil ".+\\.cabal$") (file-exists-p "cabal.project"))
+                                           '("cabal" "new-repl" dante-target "--builddir=dist/dante"))))))))
 
 (use-package shm)
+
+(use-package latex-preview-pane)
 
 (use-package haskell-mode
   :config
@@ -453,7 +462,8 @@
 
 
 ;; Make `clean-up-buffer-or-region` configurable.
-(setq auto-indent-free-modes '(org-mode c-mode agda2-mode markdown-mode c++-mode latex-mode))
+(setq auto-indent-free-modes '(org-mode c-mode agda2-mode markdown-mode c++-mode latex-mode
+                                        yaml-mode))
 
 ;; safe local variables
 (setq safe-local-variable-values '((checkdoc-package-keywords-flag)

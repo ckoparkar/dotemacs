@@ -34,6 +34,7 @@
 (depends-on "intero")
 (depends-on "dante")
 (depends-on "shm")
+(depends-on "latex-preview-pane")
 
 ;; better looking
 (depends-on "highlight-parentheses")
