@@ -95,14 +95,11 @@ want to use in the modeline *in lieu of* the original.")
              (indent-region (region-beginning) (region-end))))
     (if (member major-mode auto-whitespace-free-modes)
         (deactivate-mark)
-      (save-restriction
-        (narrow-to-region (region-beginning) (region-end))
-        (delete-trailing-whitespace)))))
-
-(defun c-whitespace-cleanup ()
-  "Wrapper around `whitespace-cleanup' that respects `auto-whitespace-free-modes'"
-  (unless (member major-mode auto-whitespace-free-modes)
-    (whitespace-cleanup)))
+      (progn
+        (save-restriction
+          (narrow-to-region (region-beginning) (region-end))
+          (delete-trailing-whitespace))
+        (whitespace-cleanup)))))
 
 (defun smartparens-dedent-all ()
   "Dedent untill all ) are properly dedented.
@@ -173,13 +170,13 @@ point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (mapc (lambda (x)
           (add-hook 'before-save-hook x))
-        '(clean-up-buffer-or-region c-whitespace-cleanup)))
+        '(clean-up-buffer-or-region)))
 
 (defun unresponsible-whitespace ()
   (interactive)
   (mapc (lambda (x)
           (remove-hook 'before-save-hook x))
-        '(clean-up-buffer-or-region c-whitespace-cleanup)))
+        '(clean-up-buffer-or-region)))
 
 (defun disable-arrow-keys ()
   "Disable arrow-keys"
