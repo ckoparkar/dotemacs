@@ -423,8 +423,7 @@
 (add-hook 'after-change-major-mode-hook 'clean-mode-line)
 
 ;; Responsible white space
-(add-hook 'before-save-hook 'whitespace-cleanup)
-(add-hook 'before-save-hook 'clean-up-buffer-or-region)
+(responsible-whitespace)
 
 (set-default 'indicate-empty-lines t)
 (setq ring-bell-function 'ignore)
@@ -447,7 +446,7 @@
 (setq default-buffer-file-coding-system 'utf-8)
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
-;;   Autosave settings
+;; Autosave settings
 (defvar temporary-file-directory "/tmp/")
 
 (setq backup-directory-alist
@@ -457,13 +456,15 @@
 
 
 ;; Org mode truncates lines
-
 (setq org-startup-truncated nil)
 
 
 ;; Make `clean-up-buffer-or-region` configurable.
-(setq auto-indent-free-modes '(org-mode c-mode agda2-mode markdown-mode c++-mode latex-mode
-                                        yaml-mode))
+(setq auto-indent-free-modes '(org-mode c-mode agda2-mode markdown-mode c++-mode
+                                        latex-mode plain-tex-mode
+                                        yaml-mode python-mode rst-mode))
+
+(setq auto-whitespace-free-modes '(latex-mode plain-tex-mode))
 
 ;; safe local variables
 (setq safe-local-variable-values '((checkdoc-package-keywords-flag)

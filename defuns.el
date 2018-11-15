@@ -51,7 +51,7 @@ With prefix argument, wrap search query in quotes."
     ;; Major modes
     (lisp-interaction-mode . "λ")
     (clojure-mode . "λ")
-    (haskell-mode . "λ")
+    (haskell-mode . ">>=")
     (python-mode . "Py")
     (emacs-lisp-mode . "λ"))
   "Alist for `clean-mode-line'.
@@ -90,12 +90,19 @@ want to use in the modeline *in lieu of* the original.")
     (unless (region-active-p)
       (mark-whole-buffer))
     (if (member major-mode auto-indent-free-modes)
-        (progn (deactivate-mark))
+        (deactivate-mark)
       (progn (untabify (region-beginning) (region-end))
              (indent-region (region-beginning) (region-end))))
-    (save-restriction
-      (narrow-to-region (region-beginning) (region-end))
-      (delete-trailing-whitespace))))
+    (if (member major-mode auto-whitespace-free-modes)
+        (deactivate-mark)
+      (save-restriction
+        (narrow-to-region (region-beginning) (region-end))
+        (delete-trailing-whitespace)))))
+
+(defun c-whitespace-cleanup ()
+  "Wrapper around `whitespace-cleanup' that respects `auto-whitespace-free-modes'"
+  (unless (member major-mode auto-whitespace-free-modes)
+    (whitespace-cleanup)))
 
 (defun smartparens-dedent-all ()
   "Dedent untill all ) are properly dedented.
@@ -166,13 +173,13 @@ point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (mapc (lambda (x)
           (add-hook 'before-save-hook x))
-        '(clean-up-buffer-or-region whitespace-cleanup)))
+        '(clean-up-buffer-or-region c-whitespace-cleanup)))
 
 (defun unresponsible-whitespace ()
   (interactive)
   (mapc (lambda (x)
           (remove-hook 'before-save-hook x))
-        '(clean-up-buffer-or-region whitespace-cleanup)))
+        '(clean-up-buffer-or-region c-whitespace-cleanup)))
 
 (defun disable-arrow-keys ()
   "Disable arrow-keys"
