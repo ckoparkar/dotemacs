@@ -194,7 +194,7 @@
   :config
   (progn
     (global-set-key (kbd "C-c C-s") c-sp-keymap)
-    (smartparens-global-strict-mode 1)
+    (smartparens-global-strict-mode -1)
     (smartparens-global-mode 1)
     (sp-pair "'" nil :actions :rem)
     (sp-pair "`" nil :actions :rem)
@@ -211,7 +211,7 @@
                     racket-repl-mode-hook
                     racket-mode-hook
                     agda2-mode-hook))
-      (add-hook hook (lambda () (smartparens-mode 1))))))
+      (add-hook hook (lambda () (smartparens-strict-mode 1))))))
 
 (use-package paxedit
   :init
@@ -437,6 +437,8 @@
  '(menu-bar-mode tool-bar-mode scroll-bar-mode))
 
 (setq inhibit-startup-message t inhibit-startup-echo-area-message t)
+
+(put 'narrow-to-region 'disabled nil)
 
 ;; Setting up Unicode
 (prefer-coding-system 'utf-8)
