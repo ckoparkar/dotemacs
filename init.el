@@ -10,14 +10,11 @@
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
 
-(add-to-list 'load-path "~/.emacs.d/site-lisp/cider")
 
-(require 'cider)
-(require 'cc-mode)
-(require 'use-package)
 (require 'dash)
 (require 's)
 (require 'f)
+(require 'use-package)
 
 (defun load-local (file)
   (load (f-expand file user-emacs-directory)))
@@ -29,17 +26,6 @@
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;     Preferences     ;;;;;;;;;;;;;;;;;
 ;; --------------------------------------------------
-
-;; initialize theme and modeline based on os
-(cond
- ((memq window-system '(x))
-  (load-theme 'default-black t)
-  (set-face-attribute 'default nil :font "Monaco-12"))
-
- ((eq system-type 'darwin)
-  (load-theme 'default-black t)
-  (exec-path-from-shell-initialize)
-  (set-face-attribute 'default nil :font "Monaco-12")))
 
 ;; programming utils
 (use-package company
@@ -59,7 +45,7 @@
   (key-chord-mode +1))
 
 (use-package projectile
-  :init (projectile-global-mode)
+  :init (projectile-mode)
   :config
   (progn
     (setq projectile-enable-caching t)
@@ -69,10 +55,7 @@
 
 (use-package crux)
 
-(use-package ace-jump-mode
-  :bind ("C-c SPC" . ace-jump-mode))
-
-(use-package magit-mode
+(use-package magit
   :config
   (progn
     (setq magit-last-seen-setup-instructions "1.4.0")
@@ -87,16 +70,6 @@
             (global-undo-tree-mode)
             (key-chord-define-global "uu" 'undo-tree-visualize)))
 
-(use-package exec-path-from-shell)
-
-(use-package xclip)
-
-(use-package inf-ruby
-  :init (add-hook 'ruby-mode-hook 'inf-ruby-minor-mode))
-
-(use-package rvm
-  :init (add-hook 'ruby-mode-hook (lambda () (rvm-activate-corresponding-ruby))))
-
 (use-package flycheck)
 
 (use-package elisp-slime-nav
@@ -104,10 +77,6 @@
   (progn
     (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
       (add-hook hook 'elisp-slime-nav-mode))))
-
-(use-package easy-kill
-  :config
-  (global-set-key [remap kill-ring-save] 'easy-kill))
 
 (use-package ace-window
   :config
@@ -118,16 +87,6 @@
   :config
   (define-key 'help-command (kbd "C-m") 'discover-my-major))
 
-(use-package avy
-  :config
-  (progn
-    (key-chord-define-global "jj" 'avy-goto-word-1)
-    (key-chord-define-global "jl" 'avy-goto-line)
-    (key-chord-define-global "jk" 'avy-goto-char)
-    (key-chord-define-global "xx" 'execute-extended-command)))
-
-(use-package ivy)
-
 (use-package swiper
   :config
   :bind ("C-s" . swiper))
@@ -135,11 +94,6 @@
 ;; IDO completion
 
 (use-package ido
-  :defer t
-  :init
-  (progn
-    (ido-mode 1)
-    (ido-everywhere 1))
   :config
   (progn
     (defun ido-my-keys ()
@@ -148,14 +102,10 @@
     (setq ido-auto-merge-work-directories-length nil)
     (add-hook 'ido-setup-hook 'ido-my-keys)
     (setq ido-mode 1)
-    (setq ido-enable-flex-matching t)
     (setq ido-everywhere t)
     (setq ido-ubiquitous-mode t)
     (setq ido-use-filename-at-point 'guess)
     (setq ido-create-new-buffer 'always)))
-
-(use-package flx-ido
-  :init (flx-ido-mode 1))
 
 (use-package ido-vertical-mode
   :init (ido-vertical-mode 1))
@@ -184,10 +134,6 @@
     (define-key map (kbd "b") backward-map)
     (define-key backward-map (kbd "s") #'sp-backward-slurp-sexp)
     (define-key backward-map (kbd "b") #'sp-backward-barf-sexp)
-    ;; ;; paxedit transpose
-    (define-key map (kbd "t") transpose-map)
-    (define-key transpose-map (kbd "b") #'paxedit-transpose-backward)
-    (define-key transpose-map (kbd "f") #'paxedit-transpose-forward)
     map))
 
 (use-package smartparens
@@ -213,23 +159,6 @@
                     agda2-mode-hook))
       (add-hook hook (lambda () (smartparens-strict-mode 1))))))
 
-(use-package paxedit
-  :init
-  (progn
-    (dolist (hook '(cider-repl-mode-hook
-                    clojure-mode-hook
-                    emacs-lisp-mode-hook
-                    list-mode-hook
-                    list-interaction-mode-hook
-                    go-mode-hook
-                    ruby-mode-hook
-                    rust-mode-hook
-                    haskell-mode-hook
-                    js2-mode-hook))
-      (add-hook hook (lambda () (paxedit-mode 1))))))
-
-;; clojure utils
-
 (use-package cider
   :config
   (progn
@@ -242,8 +171,6 @@
     (define-key cider-repl-mode-map (kbd "M-p") 'cider-repl-backward-input)
     (define-key cider-repl-mode-map (kbd "M-n") 'cider-repl-forward-input))
   :bind (("C-c r". cider-repl-reset)))
-
-(use-package 4clojure)
 
 ;; major modes
 
@@ -303,13 +230,6 @@
             (put 'pmatch 'racket-indent-function 1)
             (put 'go-on 'racket-indent-function 1)))
 
-(use-package js2-mode
-  :init
-  (progn
-    (setq js2-highlight-level 3)
-    (add-hook 'js2-mode-hook (lambda () (flycheck-mode t)))
-    (add-hook 'js2-mode-hook 'ac-js2-mode)))
-
 (use-package cask-mode)
 
 (use-package idris-mode
@@ -319,19 +239,7 @@
               (remove-hook 'before-save-hook 'whitespace-cleanup)
               (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
 
-(use-package intero
-  :config
-  (progn
-    (setq intero-package-version "0.1.32")
-    ;; (setq intero-whitelist '("~/chai/tree-velocity/gibbon-compiler"))
-    (setq intero-whitelist '())
-    (setq intero-blacklist '("/"))
-    (intero-global-mode)))
-
 (use-package dante
-  :ensure t
-  :after haskell-mode
-  :commands 'dante-mode
   :init
   (add-hook 'haskell-mode-hook 'flycheck-mode)
   :config
@@ -339,20 +247,6 @@
     (setq dante-repl-command-line-methods-alist
           `((new-build . ,(lambda (root) (when (or (directory-files root nil ".+\\.cabal$") (file-exists-p "cabal.project"))
                                            '("cabal" "new-repl" dante-target "--builddir=dist/dante"))))))))
-
-(use-package shm)
-
-(use-package latex-preview-pane)
-
-(use-package haskell-mode
-  :config
-  (progn
-    (add-hook 'haskell-mode-hook 'haskell-style)
-    (define-key haskell-mode-map (kbd "M-n") #'flycheck-next-error)
-    (define-key haskell-mode-map (kbd "M-p") #'flycheck-previous-error)
-    (setq haskell-ask-also-kill-buffers nil)
-    ;; https://github.com/haskell/haskell-mode/issues/1455
-    (setq haskell-process-args-stack-ghci '("--ghci-options=-ferror-spans"))))
 
 (defun haskell-style ()
   "Sets the current buffer to use Haskell Style. Meant to be
@@ -364,6 +258,16 @@
         haskell-indentation-starter-offset 4
         haskell-indentation-where-pre-offset 2
         haskell-indentation-where-post-offset 2))
+
+(use-package haskell-mode
+  :config
+  (progn
+    (add-hook 'haskell-mode-hook 'haskell-style)
+    (define-key haskell-mode-map (kbd "M-n") #'flycheck-next-error)
+    (define-key haskell-mode-map (kbd "M-p") #'flycheck-previous-error)
+    (setq haskell-ask-also-kill-buffers nil)
+    ;; https://github.com/haskell/haskell-mode/issues/1455
+    (setq haskell-process-args-stack-ghci '("--ghci-options=-ferror-spans"))))
 
 ;; Misc stuff
 
@@ -404,17 +308,6 @@
 ;; Remap left-command key to alt in mac
 (setq ns-command-modifier 'meta)
 
-;; 80 columns is wide enough
-;; http://stackoverflow.com/questions/18855510/have-emacs-highlight-characters-over-80/18855782#18855782
-(require 'whitespace)
-(setq whitespace-line-column 200) ;; limit line length
-(setq whitespace-style '(face lines-tail))
-(add-hook 'prog-mode-hook 'whitespace-mode)
-
-;; Other
-(setq-default indent-tabs-mode nil)
-(blink-cursor-mode 0)
-
 ;; Set auto-scroll off in shell mode
 (remove-hook 'comint-output-filter-functions
              'comint-postoutput-scroll-to-bottom)
@@ -425,20 +318,18 @@
 ;; Responsible white space
 (responsible-whitespace)
 
-(set-default 'indicate-empty-lines t)
-(setq ring-bell-function 'ignore)
-(setq column-number-mode 1)
+;; GUI
+(load-theme 'default-black t)
+(set-face-attribute 'default nil :font "Monaco-12")
 
-;; Clean GUI
+(when (eq system-type 'darwin)
+  (exec-path-from-shell-initialize))
+
 (mapc
  (lambda (mode)
    (when (fboundp mode)
      (funcall mode -1)))
  '(menu-bar-mode tool-bar-mode scroll-bar-mode))
-
-(setq inhibit-startup-message t inhibit-startup-echo-area-message t)
-
-(put 'narrow-to-region 'disabled nil)
 
 ;; Setting up Unicode
 (prefer-coding-system 'utf-8)
@@ -449,8 +340,7 @@
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
 
 ;; Autosave settings
-(defvar temporary-file-directory "/tmp/")
-
+(setq temporary-file-directory "/tmp/")
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
@@ -460,67 +350,79 @@
 ;; Org mode truncates lines
 (setq org-startup-truncated nil)
 
-
 ;; Make `clean-up-buffer-or-region` configurable.
 (setq auto-indent-free-modes '(org-mode c-mode agda2-mode markdown-mode c++-mode
                                         latex-mode plain-tex-mode
+                                        fundamental-mode
                                         yaml-mode python-mode rst-mode))
 
 (setq auto-whitespace-free-modes '(latex-mode plain-tex-mode))
 
-;; safe local variables
+;; Safe local variables
 (setq safe-local-variable-values '((checkdoc-package-keywords-flag)
                                    (bug-reference-bug-regexp . "#\\(?2:[[:digit:]]+\\)")))
+
+;; Truly misc.
+(set-default 'indicate-empty-lines t)
+(setq ring-bell-function 'ignore)
+(setq inhibit-startup-message t inhibit-startup-echo-area-message t)
+(setq column-number-mode 1)
+(put 'narrow-to-region 'disabled nil)
+(setq indent-tabs-mode nil)
+(blink-cursor-mode 0)
+
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;     C/C++     ;;;;;;;;;;;;;;;;;;;;
 ;; --------------------------------------------------
 
-;; C/C++ mode settings
-(setq-default c-basic-offset 4 c-default-style "linux")
-;; (setq-default tab-width 4 indent-tabs-mode t)
-(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
-(setq mf--source-file-extension "cpp")
-(add-hook 'c++-mode-hook '(lambda () (define-key python-mode-map "\C-m" 'newline-and-indent)))
-
-;; Smartparens
-(add-hook 'c++-mode-hook (lambda () (smartparens-mode 1)))
-(add-hook 'c-mode-hook (lambda () (smartparens-mode 1)))
+(use-package cc-mode
+  :defer t
+  :config
+  (progn
+    ;; C/C++ mode settings
+    (setq-default c-basic-offset 4 c-default-style "linux")
+    ;; (setq-default tab-width 4 indent-tabs-mode t)
+    (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
+    (setq mf--source-file-extension "cpp")
+    (add-hook 'c++-mode-hook '(lambda () (define-key python-mode-map "\C-m" 'newline-and-indent)))
+    (add-hook 'c++-mode-hook (lambda () (smartparens-mode 1)))
+    (add-hook 'c-mode-hook (lambda () (smartparens-mode 1)))))
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
 ;; --------------------------------------------------
 
-(load-file "/home/cskksc/.cabal/share/x86_64-linux-ghc-8.2.2/Agda-2.5.3/emacs-mode/agda2.el")
+;; (load-file "/home/ckoparkar/.cabal/share/x86_64-linux-ghc-8.2.2/Agda-2.5.3/emacs-mode/agda2.el")
 
-(defvar c-agda-unicode
-  '(("\\bn" "ℕ")
-    ("\\bb" "𝔹")
-    ("\\bl" "𝕃")
-    ("\\bs" "S")
-    ("\\bt" "T")
-    ("\\bv" "𝕍")
-    ("\\cv" "O")
-    ("\\comp" " ")
-    ("\\m" "ÞÑ")
-    ("\\om" "ω")))
+;; (defvar c-agda-unicode
+;;   '(("\\bn" "ℕ")
+;;     ("\\bb" "𝔹")
+;;     ("\\bl" "𝕃")
+;;     ("\\bs" "S")
+;;     ("\\bt" "T")
+;;     ("\\bv" "𝕍")
+;;     ("\\cv" "O")
+;;     ("\\comp" " ")
+;;     ("\\m" "ÞÑ")
+;;     ("\\om" "ω")))
 
-(use-package agda-mode)
+;; (use-package agda-mode)
 
-(custom-set-faces
- '(agda2-highlight-coinductive-constructor-face ((t (:foreground "#aaffcc"))))
- '(agda2-highlight-datatype-face ((t (:foreground "light blue"))))
- '(agda2-highlight-field-face ((t (:foreground "#ff99cc"))))
- '(agda2-highlight-function-face ((t (:foreground "#66ccff"))))
- '(agda2-highlight-inductive-constructor-face ((t (:foreground "#ccffaa"))))
- '(agda2-highlight-keyword-face ((t (:foreground "#ffaa00"))))
- '(agda2-highlight-module-face ((t (:foreground "#ffaaff"))))
- '(agda2-highlight-number-face ((t (:foreground "light green"))))
- '(agda2-highlight-postulate-face ((t (:foreground "#ff7766"))))
- '(agda2-highlight-primitive-face ((t (:foreground "#66ccff"))))
- '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
- '(agda2-highlight-record-face ((t (:foreground "light blue"))))
- '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))
+;; (custom-set-faces
+;;  '(agda2-highlight-coinductive-constructor-face ((t (:foreground "#aaffcc"))))
+;;  '(agda2-highlight-datatype-face ((t (:foreground "light blue"))))
+;;  '(agda2-highlight-field-face ((t (:foreground "#ff99cc"))))
+;;  '(agda2-highlight-function-face ((t (:foreground "#66ccff"))))
+;;  '(agda2-highlight-inductive-constructor-face ((t (:foreground "#ccffaa"))))
+;;  '(agda2-highlight-keyword-face ((t (:foreground "#ffaa00"))))
+;;  '(agda2-highlight-module-face ((t (:foreground "#ffaaff"))))
+;;  '(agda2-highlight-number-face ((t (:foreground "light green"))))
+;;  '(agda2-highlight-postulate-face ((t (:foreground "#ff7766"))))
+;;  '(agda2-highlight-primitive-face ((t (:foreground "#66ccff"))))
+;;  '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
+;;  '(agda2-highlight-record-face ((t (:foreground "light blue"))))
+;;  '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))
 
 ;; LLVM
 (load-file "~/.emacs.d/site-lisp/llvm-mode.el")
