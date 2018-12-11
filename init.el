@@ -27,6 +27,9 @@
 ;;;;;;;;;;;;;;;     Preferences     ;;;;;;;;;;;;;;;;;
 ;; --------------------------------------------------
 
+(use-package exec-path-from-shell
+  :config (exec-path-from-shell-initialize))
+
 ;; programming utils
 (use-package company
   :config (global-company-mode))
@@ -48,6 +51,7 @@
   :init (projectile-mode)
   :config
   (progn
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
     (setq projectile-enable-caching t)
     (setq projectile-require-project-root nil)
     (setq projectile-completion-system 'ido)
@@ -58,6 +62,7 @@
 (use-package magit
   :config
   (progn
+    (define-key magit-file-mode-map (kbd "C-x g") nil)
     (setq magit-last-seen-setup-instructions "1.4.0")
     (key-chord-define-global "mg" 'magit-status)))
 
@@ -94,6 +99,10 @@
 ;; IDO completion
 
 (use-package ido
+  :init
+  (progn
+    (ido-mode 1)
+    (ido-everywhere t))
   :config
   (progn
     (defun ido-my-keys ()
@@ -101,14 +110,15 @@
       (define-key ido-common-completion-map (kbd "C-p") 'ido-prev-match))
     (setq ido-auto-merge-work-directories-length nil)
     (add-hook 'ido-setup-hook 'ido-my-keys)
-    (setq ido-mode 1)
-    (setq ido-everywhere t)
     (setq ido-ubiquitous-mode t)
     (setq ido-use-filename-at-point 'guess)
     (setq ido-create-new-buffer 'always)))
 
 (use-package ido-vertical-mode
   :init (ido-vertical-mode 1))
+
+(use-package flx-ido
+  :init (flx-ido-mode 1))
 
 (use-package smex)
 
@@ -241,12 +251,19 @@
 
 (use-package dante
   :init
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
-  :config
   (progn
+    (setq tree-velocity-p (string= (projectile-project-root) "/home/ckoparkar/chai/tree-velocity/"))
+    (setq c-with-ghc '((tree-velocity . "ghc-8.4.3")))
     (setq dante-repl-command-line-methods-alist
-          `((new-build . ,(lambda (root) (when (or (directory-files root nil ".+\\.cabal$") (file-exists-p "cabal.project"))
-                                           '("cabal" "new-repl" dante-target "--builddir=dist/dante"))))))))
+          `((new-build .
+                       ,(lambda (root)
+                          (let ((ghc-version
+                                 (cond (tree-velocity-p (alist-get 'tree-velocity c-with-ghc))
+                                       (t "ghc-8.4.3"))))
+                            `("cabal" "new-repl" dante-target "--builddir=dist/dante" "--with-ghc" ,ghc-version))))))
+    (setq flycheck-error-list-minimum-level 'warning)
+    (add-hook 'haskell-mode-hook '(lambda () (when tree-velocity-p (dante-mode))))
+    (add-hook 'dante-mode-hook 'flycheck-mode)))
 
 (defun haskell-style ()
   "Sets the current buffer to use Haskell Style. Meant to be
@@ -353,14 +370,17 @@
 ;; Make `clean-up-buffer-or-region` configurable.
 (setq auto-indent-free-modes '(org-mode c-mode agda2-mode markdown-mode c++-mode
                                         latex-mode plain-tex-mode
+                                        makefile-gmake-mode
                                         fundamental-mode
+                                        haskell-cabal-mode
                                         yaml-mode python-mode rst-mode))
 
-(setq auto-whitespace-free-modes '(latex-mode plain-tex-mode))
+(setq auto-whitespace-free-modes '(latex-mode plain-tex-mode makefile-gmake-mode))
 
 ;; Safe local variables
 (setq safe-local-variable-values '((checkdoc-package-keywords-flag)
-                                   (bug-reference-bug-regexp . "#\\(?2:[[:digit:]]+\\)")))
+                                   (bug-reference-bug-regexp . "#\\(?2:[[:digit:]]+\\)")
+                                   (buffer-file-coding-system . utf-8-unix)))
 
 ;; Truly misc.
 (set-default 'indicate-empty-lines t)

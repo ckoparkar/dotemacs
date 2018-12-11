@@ -23,6 +23,8 @@
 (depends-on "discover-my-major")
 (depends-on "swiper")
 (depends-on "dante")
+(depends-on "flx-ido")
+(depends-on "exec-path-from-shell")
 
 ;; better looking
 (depends-on "highlight-parentheses")
