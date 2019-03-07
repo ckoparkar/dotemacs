@@ -25,6 +25,7 @@
 (depends-on "dante")
 (depends-on "flx-ido")
 (depends-on "exec-path-from-shell")
+(depends-on "xclip")
 
 ;; better looking
 (depends-on "highlight-parentheses")
@@ -55,3 +56,5 @@
 (depends-on "racket-mode")
 (depends-on "cask-mode")
 (depends-on "idris-mode")
+(depends-on "proof-general")
+(depends-on "dockerfile-mode")

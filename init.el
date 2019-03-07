@@ -249,20 +249,28 @@
               (remove-hook 'before-save-hook 'whitespace-cleanup)
               (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
 
+(use-package proof-site
+  :config (setq coq-compile-before-require 't))
+
+(use-package dockerfile-mode)
+
+(defun tree-velocity-p ()
+  (string= (projectile-project-root) "/home/ckoparkar/chai/tree-velocity/"))
+
 (use-package dante
   :init
   (progn
-    (setq tree-velocity-p (string= (projectile-project-root) "/home/ckoparkar/chai/tree-velocity/"))
     (setq c-with-ghc '((tree-velocity . "ghc-8.4.3")))
+    (setq flycheck-error-list-minimum-level 'warning)
     (setq dante-repl-command-line-methods-alist
           `((new-build .
                        ,(lambda (root)
-                          (let ((ghc-version
-                                 (cond (tree-velocity-p (alist-get 'tree-velocity c-with-ghc))
-                                       (t "ghc-8.4.3"))))
-                            `("cabal" "new-repl" dante-target "--builddir=dist/dante" "--with-ghc" ,ghc-version))))))
-    (setq flycheck-error-list-minimum-level 'warning)
-    (add-hook 'haskell-mode-hook '(lambda () (when tree-velocity-p (dante-mode))))
+                          (let ((ghc-version "ghc-8.4.3"
+                                             ;; (cond ((tree-velocity-p) (alist-get 'tree-velocity c-with-ghc))
+                                             ;;       (t "ghc-8.4.3"))
+                                             ))
+                            `("cabal" "new-repl" dante-target "--builddir=dist/dante" "--with-ghc" "ghc-8.4.3"))))))
+    (add-hook 'haskell-mode-hook '(lambda () (when (tree-velocity-p) (dante-mode))))
     (add-hook 'dante-mode-hook 'flycheck-mode)))
 
 (defun haskell-style ()
@@ -282,6 +290,7 @@
     (add-hook 'haskell-mode-hook 'haskell-style)
     (define-key haskell-mode-map (kbd "M-n") #'flycheck-next-error)
     (define-key haskell-mode-map (kbd "M-p") #'flycheck-previous-error)
+    (define-key haskell-mode-map (kbd "C-c C-s") nil)
     (setq haskell-ask-also-kill-buffers nil)
     ;; https://github.com/haskell/haskell-mode/issues/1455
     (setq haskell-process-args-stack-ghci '("--ghci-options=-ferror-spans"))))
@@ -335,8 +344,19 @@
 ;; Responsible white space
 (responsible-whitespace)
 
-;; GUI
-(load-theme 'default-black t)
+(if (daemonp)
+    (progn
+      (xclip-mode 1)
+      (defun xterm-paste ()
+        (interactive)
+        (yank))
+      (load-theme 'wombat t))
+  (progn
+    ;; [2019.03.07] This theme doesn't work in terminal for some reason.unbind C-b
+    (load-theme 'default-black t)))
+
+(use-package xclip)
+
 (set-face-attribute 'default nil :font "Monaco-12")
 
 (when (eq system-type 'darwin)
@@ -373,7 +393,8 @@
                                         makefile-gmake-mode
                                         fundamental-mode
                                         haskell-cabal-mode
-                                        yaml-mode python-mode rst-mode))
+                                        yaml-mode python-mode rst-mode
+                                        coq-mode dockerfile-mode sh-mode))
 
 (setq auto-whitespace-free-modes '(latex-mode plain-tex-mode makefile-gmake-mode))
 
