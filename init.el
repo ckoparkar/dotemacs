@@ -250,7 +250,10 @@
               (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
 
 (use-package proof-site
-  :config (setq coq-compile-before-require 't))
+  :config (progn
+            (setq coq-compile-before-require 't)
+            (set-face-attribute 'proof-locked-face nil
+                                :background "#282622")))
 
 (use-package dockerfile-mode)
 
@@ -426,9 +429,11 @@
     ;; (setq-default tab-width 4 indent-tabs-mode t)
     (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
     (setq mf--source-file-extension "cpp")
-    (add-hook 'c++-mode-hook '(lambda () (define-key python-mode-map "\C-m" 'newline-and-indent)))
     (add-hook 'c++-mode-hook (lambda () (smartparens-mode 1)))
-    (add-hook 'c-mode-hook (lambda () (smartparens-mode 1)))))
+    (add-hook 'c-mode-hook (lambda ()
+                             (setq comment-start "//"
+                                   comment-end  "")
+                             (smartparens-mode 1)))))
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
