@@ -26,6 +26,8 @@
 (depends-on "flx-ido")
 (depends-on "exec-path-from-shell")
 (depends-on "xclip")
+(depends-on "lsp-mode")
+(depends-on "flycheck-rust")
 
 ;; better looking
 (depends-on "highlight-parentheses")

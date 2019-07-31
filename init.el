@@ -75,7 +75,13 @@
             (global-undo-tree-mode)
             (key-chord-define-global "uu" 'undo-tree-visualize)))
 
-(use-package flycheck)
+(use-package flycheck
+  :config (progn
+            (define-key flycheck-mode-map (kbd "M-n") #'flycheck-next-error)
+            (define-key flycheck-mode-map (kbd "M-p") #'flycheck-previous-error)))
+
+(use-package flycheck-rust
+  :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package elisp-slime-nav
   :config
@@ -211,7 +217,8 @@
 (use-package feature-mode
   :mode (("\.feature$" . feature-mode)))
 
-(use-package rust-mode)
+(use-package rust-mode
+  :hook (rust-mode . lsp))
 
 (use-package lua-mode
   :mode (("\\.lua\\'" . lua-mode)))
@@ -291,8 +298,6 @@
   :config
   (progn
     (add-hook 'haskell-mode-hook 'haskell-style)
-    (define-key haskell-mode-map (kbd "M-n") #'flycheck-next-error)
-    (define-key haskell-mode-map (kbd "M-p") #'flycheck-previous-error)
     (define-key haskell-mode-map (kbd "C-c C-s") nil)
     (setq haskell-ask-also-kill-buffers nil)
     ;; https://github.com/haskell/haskell-mode/issues/1455
@@ -397,7 +402,8 @@
                                         fundamental-mode
                                         haskell-cabal-mode
                                         yaml-mode python-mode rst-mode
-                                        coq-mode dockerfile-mode sh-mode))
+                                        coq-mode dockerfile-mode sh-mode
+                                        rust-mode))
 
 (setq auto-whitespace-free-modes '(latex-mode plain-tex-mode makefile-gmake-mode))
 
