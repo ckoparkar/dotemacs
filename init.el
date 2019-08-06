@@ -133,6 +133,9 @@
   (progn
     (add-hook 'emacs-lisp-mode-hook (lambda () (eldoc-mode 1)))))
 
+(use-package lsp-mode
+  :config (setq lsp-enable-snippet nil))
+
 ;; managing parens
 
 (defvar c-sp-keymap
@@ -218,7 +221,9 @@
   :mode (("\.feature$" . feature-mode)))
 
 (use-package rust-mode
-  :hook (rust-mode . lsp))
+  :hook ((rust-mode . lsp)
+         (rust-mode . flycheck-mode))
+  :config (progn (setq lsp-prefer-flymake nil)))
 
 (use-package lua-mode
   :mode (("\\.lua\\'" . lua-mode)))
@@ -272,14 +277,7 @@
   (progn
     (setq c-with-ghc '((tree-velocity . "ghc-8.4.3")))
     (setq flycheck-error-list-minimum-level 'warning)
-    (setq dante-repl-command-line-methods-alist
-          `((new-build .
-                       ,(lambda (root)
-                          (let ((ghc-version "ghc-8.4.3"
-                                             ;; (cond ((tree-velocity-p) (alist-get 'tree-velocity c-with-ghc))
-                                             ;;       (t "ghc-8.4.3"))
-                                             ))
-                            `("cabal" "new-repl" dante-target "--builddir=dist/dante" "--with-ghc" "ghc-8.4.3"))))))
+    (setq dante-repl-command-line `("cabal" "new-repl" "--builddir=dist/dante" "--with-ghc" "ghc-8.4.3"))
     (add-hook 'haskell-mode-hook '(lambda () (when (tree-velocity-p) (dante-mode))))
     (add-hook 'dante-mode-hook 'flycheck-mode)))
 
