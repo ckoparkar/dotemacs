@@ -22,7 +22,7 @@
 (depends-on "ace-window")
 (depends-on "discover-my-major")
 (depends-on "swiper")
-(depends-on "dante")
+(depends-on "dante" :git "https://github.com/jyp/dante.git" :ref "a25ae9e5b5425cffdd88d498777e90ea8655fa37")
 (depends-on "flx-ido")
 (depends-on "exec-path-from-shell")
 (depends-on "xclip")

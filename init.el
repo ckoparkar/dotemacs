@@ -133,8 +133,8 @@
   (progn
     (add-hook 'emacs-lisp-mode-hook (lambda () (eldoc-mode 1)))))
 
-(use-package lsp-mode
-  :config (setq lsp-enable-snippet nil))
+;; (use-package lsp-mode
+;;   :config (setq lsp-enable-snippet nil))
 
 ;; managing parens
 
@@ -250,7 +250,13 @@
             (put 'conde 'racket-indent-function 0)
             (put 'union-case 'racket-indent-function 2)
             (put 'pmatch 'racket-indent-function 1)
-            (put 'go-on 'racket-indent-function 1)))
+            (put 'go-on 'racket-indent-function 1)
+            (put 'letregion 'racket-indent-function 1)
+            (put 'letloc 'racket-indent-function 1)
+            (put 'letpacked 'racket-indent-function 1)
+            (put 'letew 'racket-indent-function 1)
+            (put 'letscalar 'racket-indent-function 1)
+            (put 'if0 'racket-indent-function 1)))
 
 (use-package cask-mode)
 
@@ -269,17 +275,25 @@
 
 (use-package dockerfile-mode)
 
-(defun tree-velocity-p ()
-  (string= (projectile-project-root) "/home/ckoparkar/chai/tree-velocity/"))
+(defun enable-dante ()
+  (or (string= (projectile-project-root) "/home/ckoparkar/chai/tree-velocity/")
+      (string= (projectile-project-root) "/home/ckoparkar/chai/fusion-plugin/")
+      ;; (string= (projectile-project-root) "/home/ckoparkar/chai/classes/distributed-systems/")
+      ))
+
+(defun ghc-version ()
+  (cond
+   ((string= (projectile-project-root) "/home/ckoparkar/chai/tree-velocity/") "ghc-8.4.3")
+   ((string= (projectile-project-root) "/home/ckoparkar/chai/fusion-plugin/") "ghc-8.8.2")
+   (t "ghc-8.6.5")))
 
 (use-package dante
   :init
   (progn
-    (setq c-with-ghc '((tree-velocity . "ghc-8.4.3")))
     (setq flycheck-error-list-minimum-level 'warning)
-    (setq dante-repl-command-line `("cabal" "new-repl" "--builddir=dist/dante" "--with-ghc" "ghc-8.4.3"))
-    (add-hook 'haskell-mode-hook '(lambda () (when (tree-velocity-p) (dante-mode))))
-    (add-hook 'dante-mode-hook 'flycheck-mode)))
+    (add-hook 'dante-mode-hook 'flycheck-mode)
+    (setq dante-repl-command-line `("cabal" "new-repl" "--builddir=dist/dante" "--with-ghc" (ghc-version)))
+    (add-hook 'haskell-mode-hook '(lambda () (when (enable-dante) (dante-mode))))))
 
 (defun haskell-style ()
   "Sets the current buffer to use Haskell Style. Meant to be
@@ -297,9 +311,7 @@
   (progn
     (add-hook 'haskell-mode-hook 'haskell-style)
     (define-key haskell-mode-map (kbd "C-c C-s") nil)
-    (setq haskell-ask-also-kill-buffers nil)
-    ;; https://github.com/haskell/haskell-mode/issues/1455
-    (setq haskell-process-args-stack-ghci '("--ghci-options=-ferror-spans"))))
+    (setq haskell-ask-also-kill-buffers nil)))
 
 ;; Misc stuff
 
@@ -328,7 +340,7 @@
 (global-auto-revert-mode t)
 
 ;; Newline at end of file
-(setq require-final-newline t)
+;; (setq require-final-newline nil)
 
 ;; More useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
@@ -401,7 +413,7 @@
                                         haskell-cabal-mode
                                         yaml-mode python-mode rst-mode
                                         coq-mode dockerfile-mode sh-mode
-                                        rust-mode))
+                                        rust-mode conf-toml-mode))
 
 (setq auto-whitespace-free-modes '(latex-mode plain-tex-mode makefile-gmake-mode))
 
