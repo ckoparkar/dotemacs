@@ -36,29 +36,29 @@ With prefix argument, wrap search query in quotes."
     (browse-url
      (concat "http://www.google.com/search?ie=utf-8&oe=utf-8&q=" query))))
 
-(defvar mode-line-cleaner-alist
-  `((auto-complete-mode . " ac")
-    (eldoc-mode . "")
-    (abbrev-mode . "")
-    (undo-tree-mode . "")
-    (highlight-parentheses-mode . "")
-    (magit-auto-revert-mode . "")
-    (guide-key-mode . "")
-    (smartparens-mode . "")
-    (projectile-mode . "")
-    (cider-mode . "")
-
-    ;; Major modes
-    (lisp-interaction-mode . "λ")
-    (clojure-mode . "λ")
-    (haskell-mode . ">>=")
-    (python-mode . "Py")
-    (emacs-lisp-mode . "λ"))
-  "Alist for `clean-mode-line'.
-
-When you add a new element to the alist, keep in mind that you
-must pass the correct minor/major mode symbol and a string you
-want to use in the modeline *in lieu of* the original.")
+;; Alist for `clean-mode-line'.
+;;
+;; When you add a new element to the alist, keep in mind that you
+;; must pass the correct minor/major mode symbol and a string you
+;; want to use in the modeline *in lieu of* the original.
+(setq mode-line-cleaner-alist
+      `((auto-complete-mode . " ac")
+        (eldoc-mode . "")
+        (abbrev-mode . "")
+        (undo-tree-mode . "")
+        (highlight-parentheses-mode . "")
+        (magit-auto-revert-mode . "")
+        (guide-key-mode . "")
+        (smartparens-mode . "")
+        (projectile-mode . "")
+        (cider-mode . "")
+        (company-mode . "")
+        (elisp-slime-nav-mode . "")
+        (lisp-interaction-mode . "λ")
+        (clojure-mode . "λ")
+        (haskell-mode . ">>=")
+        (python-mode . "Py")
+        (emacs-lisp-mode . "λ")))
 
 (defun clean-mode-line ()
   (interactive)

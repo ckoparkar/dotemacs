@@ -55,6 +55,7 @@
     (setq projectile-enable-caching t)
     (setq projectile-require-project-root nil)
     (setq projectile-completion-system 'ido)
+    (global-set-key (kbd "C-c C-f") 'projectile-find-file)
     (add-to-list 'projectile-globally-ignored-files ".DS_Store")))
 
 (use-package crux)
@@ -362,18 +363,8 @@
 ;; Responsible white space
 (responsible-whitespace)
 
-(if (daemonp)
-    (progn
-      (xclip-mode 1)
-      (defun xterm-paste ()
-        (interactive)
-        (yank))
-      (load-theme 'wombat t))
-  (progn
-    ;; [2019.03.07] This theme doesn't work in terminal for some reason.unbind C-b
-    (load-theme 'default-black t)))
-
-(use-package xclip)
+;; Theme
+(load-theme 'default-black t)
 
 (set-face-attribute 'default nil :font "Monaco-12")
 
