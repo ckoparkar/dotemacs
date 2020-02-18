@@ -2,14 +2,10 @@
 (add-to-list 'package-archives
              '("marmalade" .
                "http://marmalade-repo.org/packages/"))
-
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-
 (package-initialize)
-
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
-
 
 (require 'dash)
 (require 's)
@@ -22,6 +18,7 @@
 (load-local "defuns")
 (load-local "keybindings")
 (load-local "iuscheme")
+(load-local "llvm-mode")
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;     Preferences     ;;;;;;;;;;;;;;;;;
@@ -269,10 +266,7 @@
               (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
 
 (use-package proof-site
-  :config (progn
-            (setq coq-compile-before-require 't)
-            (set-face-attribute 'proof-locked-face nil
-                                :background "#282622")))
+  :config (setq coq-compile-before-require 't))
 
 (use-package dockerfile-mode)
 
@@ -313,6 +307,8 @@
     (add-hook 'haskell-mode-hook 'haskell-style)
     (define-key haskell-mode-map (kbd "C-c C-s") nil)
     (setq haskell-ask-also-kill-buffers nil)))
+
+(use-package sml-mode)
 
 ;; Misc stuff
 
@@ -476,6 +472,3 @@
 ;;  '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
 ;;  '(agda2-highlight-record-face ((t (:foreground "light blue"))))
 ;;  '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))
-
-;; LLVM
-(load-file "~/.emacs.d/site-lisp/llvm-mode.el")

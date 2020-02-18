@@ -26,8 +26,6 @@
 (depends-on "flx-ido")
 (depends-on "exec-path-from-shell")
 (depends-on "xclip")
-(depends-on "lsp-mode")
-(depends-on "flycheck-rust")
 
 ;; better looking
 (depends-on "highlight-parentheses")
@@ -45,6 +43,7 @@
 (depends-on "cider")
 (depends-on "go-mode")
 (depends-on "haskell-mode")
+(depends-on "sml-mode")
 (depends-on "ruby-mode")
 (depends-on "feature-mode")
 (depends-on "rust-mode")
