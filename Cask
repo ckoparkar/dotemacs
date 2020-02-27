@@ -26,17 +26,14 @@
 (depends-on "flx-ido")
 (depends-on "exec-path-from-shell")
 (depends-on "xclip")
-
-;; better looking
 (depends-on "highlight-parentheses")
+(depends-on "smartparens")
 
 ;; IDO completion
 (depends-on "ido")
 (depends-on "ido-vertical-mode")
 (depends-on "smex")
 
-;; managing parens
-(depends-on "smartparens")
 
 ;; major modes
 (depends-on "clojure-mode")

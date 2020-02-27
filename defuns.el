@@ -48,7 +48,6 @@ With prefix argument, wrap search query in quotes."
         (undo-tree-mode . "")
         (highlight-parentheses-mode . "")
         (magit-auto-revert-mode . "")
-        (guide-key-mode . "")
         (smartparens-mode . "")
         (projectile-mode . "")
         (cider-mode . "")
@@ -197,14 +196,6 @@ point reaches the beginning or end of the buffer, stop there."
 (defun edit-init-el ()
   "Open my init.el file."
   (find-file "~/.emacs.d/init.el"))
-
-(fset 'let*->set!
-      [?\C-= ?\C-x ?\C-m ?m ?c ?/ ?m ?a ?r ?k ?- ?a ?l ?l ?\C-n return ?\[ return ?\C-g ?s ?e ?t ?! ?  ?\C-b ?\C-b ?\C-b ?\C-b ?\C-b ?\C-b ?\C-c ?\C-p ?\C-c ?\C-p ?\C-g ?\C-c ?\C-s ?s ?\C-w ?b ?e ?g ?i ?n ?  ?\C-x ?\C-s])
-
-(defun haskell-insert-language-pragma-at-point ()
-  (interactive)
-  (insert "{-# LANGUAGE  #-}")
-  (backward-char 4))
 
 (provide 'defuns)
 ;;; defuns.el ends here

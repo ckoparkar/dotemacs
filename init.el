@@ -308,7 +308,11 @@
     (define-key haskell-mode-map (kbd "C-c C-s") nil)
     (setq haskell-ask-also-kill-buffers nil)))
 
-(use-package sml-mode)
+(use-package sml-mode
+  :config (progn
+            (setq sml-indent-level 2)
+            (setq sml-indent-args 2)
+            (setq indent-tabs-mode nil)))
 
 ;; Misc stuff
 
@@ -400,7 +404,8 @@
                                         haskell-cabal-mode
                                         yaml-mode python-mode rst-mode
                                         coq-mode dockerfile-mode sh-mode
-                                        rust-mode conf-toml-mode))
+                                        rust-mode conf-toml-mode sml-mode
+                                        bibtex-mode))
 
 (setq auto-whitespace-free-modes '(latex-mode plain-tex-mode makefile-gmake-mode))
 
