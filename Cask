@@ -27,6 +27,7 @@
 (depends-on "exec-path-from-shell")
 (depends-on "xclip")
 (depends-on "highlight-parentheses")
+(depends-on "gruvbox-theme")
 (depends-on "smartparens")
 
 ;; IDO completion

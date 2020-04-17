@@ -365,8 +365,10 @@
 
 ;; Theme
 (load-theme 'default-black t)
-
 (set-face-attribute 'default nil :font "Monaco-12")
+(global-hl-line-mode)
+;; (load-theme 'gruvbox-dark-hard t)
+;; (load-theme 'gruvbox-light-medium t)
 
 (when (eq system-type 'darwin)
   (exec-path-from-shell-initialize))
