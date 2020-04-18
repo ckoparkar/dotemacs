@@ -1,13 +1,7 @@
 (source melpa)
 (source gnu)
 
-;; libraries
-(depends-on "dash")
-(depends-on "s")
-(depends-on "f")
-
 ;; programming utilities
-(depends-on "cask")
 (depends-on "company")
 (depends-on "multiple-cursors")
 (depends-on "key-chord")

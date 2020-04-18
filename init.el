@@ -1,19 +1,9 @@
-(require 'package)
-(add-to-list 'package-archives
-             '("marmalade" .
-               "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(package-initialize)
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
-
-(require 'dash)
-(require 's)
-(require 'f)
 (require 'use-package)
 
 (defun load-local (file)
-  (load (f-expand file user-emacs-directory)))
+  (load (concat user-emacs-directory file)))
 
 (load-local "defuns")
 (load-local "keybindings")
@@ -32,7 +22,6 @@
   :config (global-company-mode))
 
 (use-package multiple-cursors
-  :defer t
   :bind (("M->" . mc/mark-next-like-this)
          ("C-." . mc/mark-next-like-this)
          ("M-<" . mc/mark-previous-like-this)
@@ -77,9 +66,6 @@
   :config (progn
             (define-key flycheck-mode-map (kbd "M-n") #'flycheck-next-error)
             (define-key flycheck-mode-map (kbd "M-p") #'flycheck-previous-error)))
-
-(use-package flycheck-rust
-  :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package elisp-slime-nav
   :config
@@ -131,9 +117,6 @@
   (progn
     (add-hook 'emacs-lisp-mode-hook (lambda () (eldoc-mode 1)))))
 
-;; (use-package lsp-mode
-;;   :config (setq lsp-enable-snippet nil))
-
 ;; managing parens
 
 (defvar c-sp-keymap
@@ -154,6 +137,7 @@
     map))
 
 (use-package smartparens
+  :defer t
   :config
   (progn
     (global-set-key (kbd "C-c C-s") c-sp-keymap)
@@ -177,6 +161,7 @@
       (add-hook hook (lambda () (smartparens-strict-mode 1))))))
 
 (use-package cider
+  :defer t
   :config
   (progn
     (add-hook 'cider-mode-hook 'eldoc-mode)
@@ -192,6 +177,7 @@
 ;; major modes
 
 (use-package clojure-mode
+  :defer t
   :mode (("\\.clj\\'" . clojure-mode)
          ("\\.cljx\\'" . clojure-mode)
          ("\\.cljs\\'" . clojure-mode))
@@ -201,6 +187,7 @@
             (put-clojure-indent 'insert 1)))
 
 (use-package go-mode
+  :defer t
   :config
   (progn
     (defun csk-go-mode-hooks ()
@@ -211,22 +198,27 @@
     (add-hook 'go-mode-hook 'csk-go-mode-hooks)))
 
 (use-package ruby-mode
+  :defer t
   :init
   (progn
     (add-hook 'ruby-mode-hook '(lambda () (define-key ruby-mode-map "\C-m" 'newline-and-indent)))))
 
 (use-package feature-mode
+  :defer t
   :mode (("\.feature$" . feature-mode)))
 
 (use-package rust-mode
+  :defer t
   :hook ((rust-mode . lsp)
          (rust-mode . flycheck-mode))
   :config (progn (setq lsp-prefer-flymake nil)))
 
 (use-package lua-mode
+  :defer t
   :mode (("\\.lua\\'" . lua-mode)))
 
 (use-package markdown-mode
+  :defer t
   :mode
   (("\\.markdown\\'" . markdown-mode)
    ("\\.md\\'" . markdown-mode)))
@@ -236,9 +228,11 @@
   :mode ("\\.yml$" . yaml-mode))
 
 (use-package restclient
+  :defer t
   :mode (("\\.rest\\'" . restclient-mode)))
 
 (use-package racket-mode
+  :defer t
   :mode (("\\.rkt\\'" . racket-mode) ("\\.gib\\'" . racket-mode) ("\\.pie\\'" . racket-mode))
   :config (progn
             (define-key racket-repl-mode-map "\r" 'scheme-return)
@@ -259,6 +253,7 @@
 (use-package cask-mode)
 
 (use-package idris-mode
+  :defer t
   :init
   (add-hook 'idris-mode-hook
             (lambda ()
@@ -266,6 +261,7 @@
               (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
 
 (use-package proof-site
+  :defer t
   :config (setq coq-compile-before-require 't))
 
 (use-package dockerfile-mode)
@@ -283,6 +279,7 @@
    (t "ghc-8.6.5")))
 
 (use-package dante
+  :defer t
   :init
   (progn
     (setq flycheck-error-list-minimum-level 'warning)
@@ -302,6 +299,7 @@
         haskell-indentation-where-post-offset 2))
 
 (use-package haskell-mode
+  :defer t
   :config
   (progn
     (add-hook 'haskell-mode-hook 'haskell-style)
@@ -309,10 +307,26 @@
     (setq haskell-ask-also-kill-buffers nil)))
 
 (use-package sml-mode
+  :defer t
   :config (progn
             (setq sml-indent-level 2)
             (setq sml-indent-args 2)
             (setq indent-tabs-mode nil)))
+
+(use-package cc-mode
+  :defer t
+  :config
+  (progn
+    ;; C/C++ mode settings
+    (setq-default c-basic-offset 4 c-default-style "linux")
+    ;; (setq-default tab-width 4 indent-tabs-mode t)
+    (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
+    (setq mf--source-file-extension "cpp")
+    (add-hook 'c++-mode-hook (lambda () (smartparens-mode 1)))
+    (add-hook 'c-mode-hook (lambda ()
+                             (setq comment-start "//"
+                                   comment-end  "")
+                             (smartparens-mode 1)))))
 
 ;; Misc stuff
 
@@ -364,11 +378,12 @@
 (responsible-whitespace)
 
 ;; Theme
-(load-theme 'default-black t)
-(set-face-attribute 'default nil :font "Monaco-12")
-(global-hl-line-mode)
+;; (load-theme 'default-black t)
 ;; (load-theme 'gruvbox-dark-hard t)
 ;; (load-theme 'gruvbox-light-medium t)
+(set-face-attribute 'default nil :font "Monaco-12")
+
+(global-hl-line-mode)
 
 (when (eq system-type 'darwin)
   (exec-path-from-shell-initialize))
@@ -424,26 +439,6 @@
 (put 'narrow-to-region 'disabled nil)
 (setq indent-tabs-mode nil)
 (blink-cursor-mode 0)
-
-
-;; --------------------------------------------------
-;;;;;;;;;;;;;;;     C/C++     ;;;;;;;;;;;;;;;;;;;;
-;; --------------------------------------------------
-
-(use-package cc-mode
-  :defer t
-  :config
-  (progn
-    ;; C/C++ mode settings
-    (setq-default c-basic-offset 4 c-default-style "linux")
-    ;; (setq-default tab-width 4 indent-tabs-mode t)
-    (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
-    (setq mf--source-file-extension "cpp")
-    (add-hook 'c++-mode-hook (lambda () (smartparens-mode 1)))
-    (add-hook 'c-mode-hook (lambda ()
-                             (setq comment-start "//"
-                                   comment-end  "")
-                             (smartparens-mode 1)))))
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
