@@ -1,25 +1,20 @@
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
 (require 'use-package)
+(require 'cl)
+
+;; --------------------------------------------------
+;;;;;;;;;;;;;;;;;     Packages     ;;;;;;;;;;;;;;;;;;
+;; --------------------------------------------------
 
 (defun load-local (file)
   (load (concat user-emacs-directory file)))
 
-(load-local "defuns")
-(load-local "keybindings")
 (load-local "iuscheme")
 (load-local "llvm-mode")
 
-;; --------------------------------------------------
-;;;;;;;;;;;;;;;     Preferences     ;;;;;;;;;;;;;;;;;
-;; --------------------------------------------------
-
 (use-package exec-path-from-shell
   :config (exec-path-from-shell-initialize))
-
-;; programming utils
-(use-package company
-  :config (global-company-mode))
 
 (use-package multiple-cursors
   :bind (("M->" . mc/mark-next-like-this)
@@ -86,8 +81,6 @@
   :config
   :bind ("C-s" . swiper))
 
-;; IDO completion
-
 (use-package ido
   :init
   (progn
@@ -110,7 +103,8 @@
 (use-package flx-ido
   :init (flx-ido-mode 1))
 
-(use-package smex)
+(use-package smex
+  :config (smex-initialize))
 
 (use-package eldoc
   :init
@@ -118,6 +112,9 @@
     (add-hook 'emacs-lisp-mode-hook (lambda () (eldoc-mode 1)))))
 
 ;; managing parens
+
+(use-package highlight-parentheses
+  :config (global-highlight-parentheses-mode t))
 
 (defvar c-sp-keymap
   (let ((map (make-sparse-keymap))
@@ -137,7 +134,6 @@
     map))
 
 (use-package smartparens
-  :defer t
   :config
   (progn
     (global-set-key (kbd "C-c C-s") c-sp-keymap)
@@ -160,6 +156,18 @@
                     agda2-mode-hook))
       (add-hook hook (lambda () (smartparens-strict-mode 1))))))
 
+;; major modes
+
+(use-package clojure-mode
+  :defer t
+  :mode (("\\.clj\\'" . clojure-mode)
+         ("\\.cljx\\'" . clojure-mode)
+         ("\\.cljs\\'" . clojure-mode))
+  :config (progn
+            ;; korma macros
+            (put-clojure-indent 'select 1)
+            (put-clojure-indent 'insert 1)))
+
 (use-package cider
   :defer t
   :config
@@ -173,18 +181,6 @@
     (define-key cider-repl-mode-map (kbd "M-p") 'cider-repl-backward-input)
     (define-key cider-repl-mode-map (kbd "M-n") 'cider-repl-forward-input))
   :bind (("C-c r". cider-repl-reset)))
-
-;; major modes
-
-(use-package clojure-mode
-  :defer t
-  :mode (("\\.clj\\'" . clojure-mode)
-         ("\\.cljx\\'" . clojure-mode)
-         ("\\.cljs\\'" . clojure-mode))
-  :config (progn
-            ;; korma macros
-            (put-clojure-indent 'select 1)
-            (put-clojure-indent 'insert 1)))
 
 (use-package go-mode
   :defer t
@@ -260,6 +256,8 @@
               (remove-hook 'before-save-hook 'whitespace-cleanup)
               (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
 
+(use-package json-mode)
+
 (use-package proof-site
   :defer t
   :config (setq coq-compile-before-require 't))
@@ -328,13 +326,258 @@
                                    comment-end  "")
                              (smartparens-mode 1)))))
 
-;; Misc stuff
 
-(define-globalized-minor-mode global-highlight-parentheses-mode
-  highlight-parentheses-mode
-  (lambda ()
-    (highlight-parentheses-mode t)))
-(global-highlight-parentheses-mode t)
+;; --------------------------------------------------
+;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
+;; --------------------------------------------------
+
+;; (load-file "/home/ckoparkar/.cabal/share/x86_64-linux-ghc-8.2.2/Agda-2.5.3/emacs-mode/agda2.el")
+
+;; (defvar c-agda-unicode
+;;   '(("\\bn" "ℕ")
+;;     ("\\bb" "𝔹")
+;;     ("\\bl" "𝕃")
+;;     ("\\bs" "S")
+;;     ("\\bt" "T")
+;;     ("\\bv" "𝕍")
+;;     ("\\cv" "O")
+;;     ("\\comp" " ")
+;;     ("\\m" "ÞÑ")
+;;     ("\\om" "ω")))
+
+;; (use-package agda-mode)
+
+;; (custom-set-faces
+;;  '(agda2-highlight-coinductive-constructor-face ((t (:foreground "#aaffcc"))))
+;;  '(agda2-highlight-datatype-face ((t (:foreground "light blue"))))
+;;  '(agda2-highlight-field-face ((t (:foreground "#ff99cc"))))
+;;  '(agda2-highlight-function-face ((t (:foreground "#66ccff"))))
+;;  '(agda2-highlight-inductive-constructor-face ((t (:foreground "#ccffaa"))))
+;;  '(agda2-highlight-keyword-face ((t (:foreground "#ffaa00"))))
+;;  '(agda2-highlight-module-face ((t (:foreground "#ffaaff"))))
+;;  '(agda2-highlight-number-face ((t (:foreground "light green"))))
+;;  '(agda2-highlight-postulate-face ((t (:foreground "#ff7766"))))
+;;  '(agda2-highlight-primitive-face ((t (:foreground "#66ccff"))))
+;;  '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
+;;  '(agda2-highlight-record-face ((t (:foreground "light blue"))))
+;;  '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))
+
+
+;; --------------------------------------------------
+;;;;;;;;;;;;;;;;;;     Defuns     ;;;;;;;;;;;;;;;;;;;
+;; --------------------------------------------------
+
+(defun duplicate-line ()
+  "Clone line at cursor, leaving the latter intact."
+  (interactive)
+  (let ((kill-read-only-ok t) deactivate-mark)
+    (toggle-read-only 1)
+    (kill-whole-line)
+    (toggle-read-only 0)
+    (yank)
+    ;; otherwise this line "kills" ;-), the first entry in the ring
+    (setq kill-ring (reverse (cdr kill-ring)))
+    (backward-char)))
+
+(defun google (arg)
+  "Googles a query or region if any.
+With prefix argument, wrap search query in quotes."
+  (interactive "P")
+  (let ((query
+         (if (region-active-p)
+             (buffer-substring (region-beginning) (region-end))
+           (read-string "Google: "))))
+    (when arg (setq query (concat "\"" query "\"")))
+    (browse-url
+     (concat "http://www.google.com/search?ie=utf-8&oe=utf-8&q=" query))))
+
+;; Alist for `clean-mode-line'.
+;;
+;; When you add a new element to the alist, keep in mind that you
+;; must pass the correct minor/major mode symbol and a string you
+;; want to use in the modeline *in lieu of* the original.
+(setq mode-line-cleaner-alist
+      `((auto-complete-mode . " ac")
+        (eldoc-mode . "")
+        (abbrev-mode . "")
+        (undo-tree-mode . "")
+        (highlight-parentheses-mode . "")
+        (magit-auto-revert-mode . "")
+        (smartparens-mode . "")
+        (projectile-mode . "")
+        (cider-mode . "")
+        (company-mode . "")
+        (elisp-slime-nav-mode . "")
+        (lisp-interaction-mode . "λ")
+        (clojure-mode . "λ")
+        (haskell-mode . ">>=")
+        (python-mode . "Py")
+        (emacs-lisp-mode . "λ")))
+
+(defun clean-mode-line ()
+  (interactive)
+  (loop for cleaner in mode-line-cleaner-alist
+        do (let* ((mode (car cleaner))
+                  (mode-str (cdr cleaner))
+                  (old-mode-str (cdr (assq mode minor-mode-alist))))
+             (when old-mode-str
+               (setcar old-mode-str mode-str))
+             ;; major mode
+             (when (eq mode major-mode)
+               (setq mode-name mode-str)))))
+
+(defun cider-repl-reset ()
+  (interactive)
+  (set-buffer
+   (car (-filter (lambda (buf-name) (s-starts-with? "*cider-repl" buf-name))
+                 (-map (lambda (buf) (buffer-name buf)) (buffer-list)))))
+  (goto-char (point-max))
+  (insert "(reset)")
+  (cider-repl-return))
+
+;; NOTE: (region-beginning) and (region-end) are not saved in
+;; variables since they can change after each clean step.
+(defun clean-up-buffer-or-region ()
+  "Untabifies, indents and deletes trailing whitespace from buffer or region."
+  (interactive)
+  (save-excursion
+    (unless (region-active-p)
+      (mark-whole-buffer))
+    (if (member major-mode auto-indent-free-modes)
+        (deactivate-mark)
+      (progn (untabify (region-beginning) (region-end))
+             (indent-region (region-beginning) (region-end))))
+    (if (member major-mode auto-whitespace-free-modes)
+        (deactivate-mark)
+      (progn
+        (save-restriction
+          (narrow-to-region (region-beginning) (region-end))
+          (delete-trailing-whitespace))
+        (whitespace-cleanup)))))
+
+(defun smartparens-dedent-all ()
+  "Dedent untill all ) are properly dedented.
+Invoke from line containing trailing parens."
+  (interactive)
+  (while (equal (string (char-after)) ")")
+    (sp-dedent-adjust-sexp))
+  (kill-whole-line))
+
+(defun prelude-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line.
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+point reaches the beginning or end of the buffer, stop there."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+(defun racket-scratch ()
+  "Create/switch to a scratch buffer for Racket."
+  (interactive)
+  (let ((buf (get-buffer-create "*racket-scratch*")))
+    (switch-to-buffer buf)
+    (racket-mode)
+    (save-excursion
+      (goto-char (point-min))
+      (unless (looking-at-p "#")
+        (insert "#lang racket\n\n")))))
+
+(defun responsible-whitespace ()
+  (interactive)
+  (mapc (lambda (x)
+          (add-hook 'before-save-hook x))
+        '(clean-up-buffer-or-region)))
+
+(defun unresponsible-whitespace ()
+  (interactive)
+  (mapc (lambda (x)
+          (remove-hook 'before-save-hook x))
+        '(clean-up-buffer-or-region)))
+
+(defun disable-arrow-keys ()
+  "Disable arrow-keys"
+  (interactive)
+  (global-unset-key (kbd "<up>"))
+  (global-unset-key (kbd "<down>"))
+  (global-unset-key (kbd "<left>"))
+  (global-unset-key (kbd "<right>")))
+
+(defun enable-arrow-keys ()
+  "Enable arrow keys."
+  (interactive)
+  (global-set-key (kbd "<up>") 'previous-line)
+  (global-set-key (kbd "<down>") 'next-line)
+  (global-set-key (kbd "<right>") 'right-char)
+  (global-set-key (kbd "<left>") 'left-char))
+
+(defun edit-init-el ()
+  "Open my init.el file."
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+
+(defun dark-theme ()
+  (interactive)
+  (load-theme 'gruvbox-dark-hard t))
+
+(defun light-theme ()
+  (interactive)
+  (disable-theme 'gruvbox-dark-hard))
+
+;; --------------------------------------------------
+;;;;;;;;;;;;;;;;     Keybindings     ;;;;;;;;;;;;;;;;
+;; --------------------------------------------------
+
+;; Avoid backspace
+(global-set-key (kbd "C-w") 'backward-kill-word)
+(global-set-key (kbd "C-x C-k") 'kill-region)
+
+;; Better help functions
+(define-key 'help-command (kbd "C-f") 'find-function)
+(define-key 'help-command (kbd "C-k") 'find-function-on-key)
+(define-key 'help-command (kbd "C-v") 'find-variable)
+(define-key 'help-command (kbd "C-l") 'find-library)
+
+;; Extra navigation
+(global-set-key (kbd "C-x g") 'goto-line)
+(global-set-key (kbd "C-x e") 'end-of-buffer)
+(global-set-key (kbd "C-x a") 'beginning-of-buffer)
+(global-set-key (kbd "<C-return>") 'crux-smart-open-line)
+(global-set-key [remap move-beginning-of-line] 'prelude-move-beginning-of-line)
+(global-set-key (kbd "M-p") 'ace-window)
+
+;; Custom defuns
+(global-set-key (kbd "C-x d") 'duplicate-line)
+(global-set-key (kbd "C-x ;") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-c da") 'smartparens-dedent-all)
+
+;; Enable smex, enhancement for M-x
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "C-x C-m") 'smex)
+(global-set-key (kbd "C-c C-m") 'smex-major-mode-commands)
+
+;; Bindings for Atreus
+(global-set-key (kbd "C-c q") 'delete-other-windows)
+(global-set-key (kbd "C-c w") 'split-window-below)
+(global-set-key (kbd "C-c e") 'split-window-right)
+(global-set-key (kbd "C-c r") 'delete-window)
+
+
+;; --------------------------------------------------
+;;;;;;;;;;;;;;;;     Misc config     ;;;;;;;;;;;;;;;;
+;; --------------------------------------------------
 
 ;; Setup linum
 (make-face 'linum-face)
@@ -413,6 +656,7 @@
 ;; Org mode truncates lines
 (setq org-startup-truncated nil)
 
+
 ;; Make `clean-up-buffer-or-region` configurable.
 (setq auto-indent-free-modes '(org-mode c-mode agda2-mode markdown-mode c++-mode
                                         latex-mode plain-tex-mode
@@ -431,7 +675,6 @@
                                    (bug-reference-bug-regexp . "#\\(?2:[[:digit:]]+\\)")
                                    (buffer-file-coding-system . utf-8-unix)))
 
-;; Truly misc.
 (set-default 'indicate-empty-lines t)
 (setq ring-bell-function 'ignore)
 (setq inhibit-startup-message t inhibit-startup-echo-area-message t)
@@ -439,38 +682,3 @@
 (put 'narrow-to-region 'disabled nil)
 (setq indent-tabs-mode nil)
 (blink-cursor-mode 0)
-
-;; --------------------------------------------------
-;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
-;; --------------------------------------------------
-
-;; (load-file "/home/ckoparkar/.cabal/share/x86_64-linux-ghc-8.2.2/Agda-2.5.3/emacs-mode/agda2.el")
-
-;; (defvar c-agda-unicode
-;;   '(("\\bn" "ℕ")
-;;     ("\\bb" "𝔹")
-;;     ("\\bl" "𝕃")
-;;     ("\\bs" "S")
-;;     ("\\bt" "T")
-;;     ("\\bv" "𝕍")
-;;     ("\\cv" "O")
-;;     ("\\comp" " ")
-;;     ("\\m" "ÞÑ")
-;;     ("\\om" "ω")))
-
-;; (use-package agda-mode)
-
-;; (custom-set-faces
-;;  '(agda2-highlight-coinductive-constructor-face ((t (:foreground "#aaffcc"))))
-;;  '(agda2-highlight-datatype-face ((t (:foreground "light blue"))))
-;;  '(agda2-highlight-field-face ((t (:foreground "#ff99cc"))))
-;;  '(agda2-highlight-function-face ((t (:foreground "#66ccff"))))
-;;  '(agda2-highlight-inductive-constructor-face ((t (:foreground "#ccffaa"))))
-;;  '(agda2-highlight-keyword-face ((t (:foreground "#ffaa00"))))
-;;  '(agda2-highlight-module-face ((t (:foreground "#ffaaff"))))
-;;  '(agda2-highlight-number-face ((t (:foreground "light green"))))
-;;  '(agda2-highlight-postulate-face ((t (:foreground "#ff7766"))))
-;;  '(agda2-highlight-primitive-face ((t (:foreground "#66ccff"))))
-;;  '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
-;;  '(agda2-highlight-record-face ((t (:foreground "light blue"))))
-;;  '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))
