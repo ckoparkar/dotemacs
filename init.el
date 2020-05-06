@@ -1,5 +1,12 @@
-(require 'cask "~/.cask/cask.el")
-(cask-initialize)
+(require 'package)
+(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+
+(setq package-selected-packages '(yaml-mode use-package undo-tree swiper sml-mode smex smartparens rust-mode restclient racket-mode projectile multiple-cursors markdown-mode magit lua-mode key-chord json-mode idris-mode ido-vertical-mode highlight-parentheses go-mode flx-ido feature-mode expand-region exec-path-from-shell elisp-slime-nav dockerfile-mode discover-my-major dante crux cider cask-mode ace-window gruvbox-theme))
 (require 'use-package)
 (require 'cl)
 
@@ -14,9 +21,11 @@
 (load-local "llvm-mode")
 
 (use-package exec-path-from-shell
+  :ensure t
   :config (exec-path-from-shell-initialize))
 
 (use-package multiple-cursors
+  :ensure t
   :bind (("M->" . mc/mark-next-like-this)
          ("C-." . mc/mark-next-like-this)
          ("M-<" . mc/mark-previous-like-this)
@@ -25,10 +34,12 @@
          ("C-x /" . mc/edit-lines)))
 
 (use-package key-chord
+  :ensure t
   :config
   (key-chord-mode +1))
 
 (use-package projectile
+  :ensure t
   :init (projectile-mode)
   :config
   (progn
@@ -39,9 +50,11 @@
     (global-set-key (kbd "C-c C-f") 'projectile-find-file)
     (add-to-list 'projectile-globally-ignored-files ".DS_Store")))
 
-(use-package crux)
+(use-package crux
+  :ensure t)
 
 (use-package magit
+  :ensure t
   :config
   (progn
     (define-key magit-file-mode-map (kbd "C-x g") nil)
@@ -49,39 +62,47 @@
     (key-chord-define-global "mg" 'magit-status)))
 
 (use-package expand-region
+  :ensure t
   :bind ("C-=" . er/expand-region))
 
 (use-package undo-tree
+  :ensure t
   :config (progn
             (define-key undo-tree-map (kbd "C-x u") nil)
             (global-undo-tree-mode)
             (key-chord-define-global "uu" 'undo-tree-visualize)))
 
 (use-package flycheck
+  :ensure t
   :config (progn
             (define-key flycheck-mode-map (kbd "M-n") #'flycheck-next-error)
             (define-key flycheck-mode-map (kbd "M-p") #'flycheck-previous-error)))
 
 (use-package elisp-slime-nav
+  :ensure t
   :config
   (progn
     (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
       (add-hook hook 'elisp-slime-nav-mode))))
 
 (use-package ace-window
+  :ensure t
   :config
   (progn
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
 
 (use-package discover-my-major
+  :ensure t
   :config
   (define-key 'help-command (kbd "C-m") 'discover-my-major))
 
 (use-package swiper
+  :ensure t
   :config
   :bind ("C-s" . swiper))
 
 (use-package ido
+  :ensure t
   :init
   (progn
     (ido-mode 1)
@@ -98,15 +119,19 @@
     (setq ido-create-new-buffer 'always)))
 
 (use-package ido-vertical-mode
+  :ensure t
   :init (ido-vertical-mode 1))
 
 (use-package flx-ido
+  :ensure t
   :init (flx-ido-mode 1))
 
 (use-package smex
+  :ensure t
   :config (smex-initialize))
 
 (use-package eldoc
+  :ensure t
   :init
   (progn
     (add-hook 'emacs-lisp-mode-hook (lambda () (eldoc-mode 1)))))
@@ -114,6 +139,7 @@
 ;; managing parens
 
 (use-package highlight-parentheses
+  :ensure t
   :config (global-highlight-parentheses-mode t))
 
 (defvar c-sp-keymap
@@ -134,6 +160,7 @@
     map))
 
 (use-package smartparens
+  :ensure t
   :config
   (progn
     (global-set-key (kbd "C-c C-s") c-sp-keymap)
@@ -159,6 +186,7 @@
 ;; major modes
 
 (use-package clojure-mode
+  :ensure t
   :defer t
   :mode (("\\.clj\\'" . clojure-mode)
          ("\\.cljx\\'" . clojure-mode)
@@ -169,6 +197,7 @@
             (put-clojure-indent 'insert 1)))
 
 (use-package cider
+  :ensure t
   :defer t
   :config
   (progn
@@ -183,6 +212,7 @@
   :bind (("C-c r". cider-repl-reset)))
 
 (use-package go-mode
+  :ensure t
   :defer t
   :config
   (progn
@@ -194,40 +224,48 @@
     (add-hook 'go-mode-hook 'csk-go-mode-hooks)))
 
 (use-package ruby-mode
+  :ensure t
   :defer t
   :init
   (progn
     (add-hook 'ruby-mode-hook '(lambda () (define-key ruby-mode-map "\C-m" 'newline-and-indent)))))
 
 (use-package feature-mode
+  :ensure t
   :defer t
   :mode (("\.feature$" . feature-mode)))
 
 (use-package rust-mode
+  :ensure t
   :defer t
   :hook ((rust-mode . lsp)
          (rust-mode . flycheck-mode))
   :config (progn (setq lsp-prefer-flymake nil)))
 
 (use-package lua-mode
+  :ensure t
   :defer t
   :mode (("\\.lua\\'" . lua-mode)))
 
 (use-package markdown-mode
+  :ensure t
   :defer t
   :mode
   (("\\.markdown\\'" . markdown-mode)
    ("\\.md\\'" . markdown-mode)))
 
 (use-package yaml-mode
+  :ensure t
   :defer t
   :mode ("\\.yml$" . yaml-mode))
 
 (use-package restclient
+  :ensure t
   :defer t
   :mode (("\\.rest\\'" . restclient-mode)))
 
 (use-package racket-mode
+  :ensure t
   :defer t
   :mode (("\\.rkt\\'" . racket-mode) ("\\.gib\\'" . racket-mode) ("\\.pie\\'" . racket-mode))
   :config (progn
@@ -246,9 +284,11 @@
             (put 'letscalar 'racket-indent-function 1)
             (put 'if0 'racket-indent-function 1)))
 
-(use-package cask-mode)
+(use-package cask-mode
+  :ensure t)
 
 (use-package idris-mode
+  :ensure t
   :defer t
   :init
   (add-hook 'idris-mode-hook
@@ -256,13 +296,16 @@
               (remove-hook 'before-save-hook 'whitespace-cleanup)
               (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
 
-(use-package json-mode)
+(use-package json-mode
+  :ensure t)
 
-(use-package proof-site
-  :defer t
-  :config (setq coq-compile-before-require 't))
+;; (use-package proof-site
+;;   :ensure t
+;;   :defer t
+;;   :config (setq coq-compile-before-require 't))
 
-(use-package dockerfile-mode)
+(use-package dockerfile-mode
+  :ensure t)
 
 (defun enable-dante ()
   (or (string= (projectile-project-root) "/home/ckoparkar/chai/tree-velocity/")
@@ -277,6 +320,7 @@
    (t "ghc-8.6.5")))
 
 (use-package dante
+  :ensure t
   :defer t
   :init
   (progn
@@ -297,6 +341,7 @@
         haskell-indentation-where-post-offset 2))
 
 (use-package haskell-mode
+  :ensure t
   :defer t
   :config
   (progn
@@ -305,6 +350,7 @@
     (setq haskell-ask-also-kill-buffers nil)))
 
 (use-package sml-mode
+  :ensure t
   :defer t
   :config (progn
             (setq sml-indent-level 2)
@@ -312,6 +358,7 @@
             (setq indent-tabs-mode nil)))
 
 (use-package cc-mode
+  :ensure t
   :defer t
   :config
   (progn
@@ -527,6 +574,9 @@ point reaches the beginning or end of the buffer, stop there."
   "Open my init.el file."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
+
+;; (use-package gruvbox-theme
+;;   :ensure t)
 
 (defun dark-theme ()
   (interactive)
