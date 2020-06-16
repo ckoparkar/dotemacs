@@ -5,8 +5,7 @@
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
-
-(setq package-selected-packages '(yaml-mode use-package undo-tree swiper sml-mode smex smartparens rust-mode restclient racket-mode projectile multiple-cursors markdown-mode magit lua-mode key-chord json-mode idris-mode ido-vertical-mode highlight-parentheses go-mode flx-ido feature-mode expand-region exec-path-from-shell elisp-slime-nav dockerfile-mode discover-my-major dante crux cider cask-mode ace-window gruvbox-theme))
+(setq package-selected-packages '(fullframe leuven-theme fennel-mode yaml-mode use-package undo-tree swiper sml-mode smex smartparens rust-mode restclient racket-mode projectile multiple-cursors markdown-mode magit lua-mode key-chord json-mode idris-mode ido-vertical-mode highlight-parentheses go-mode flx-ido feature-mode expand-region exec-path-from-shell elisp-slime-nav dockerfile-mode discover-my-major dante crux cider cask-mode ace-window gruvbox-theme))
 (require 'use-package)
 (require 'cl)
 
@@ -136,6 +135,11 @@
   (progn
     (add-hook 'emacs-lisp-mode-hook (lambda () (eldoc-mode 1)))))
 
+(use-package fullframe
+  :ensure t
+  :config (progn
+            (fullframe magit-status magit-mode-quit-window)))
+
 ;; managing parens
 
 (use-package highlight-parentheses
@@ -180,7 +184,8 @@
                     js2-mode-hook
                     racket-repl-mode-hook
                     racket-mode-hook
-                    agda2-mode-hook))
+                    agda2-mode-hook
+                    fennel-mode))
       (add-hook hook (lambda () (smartparens-strict-mode 1))))))
 
 ;; major modes
@@ -210,6 +215,9 @@
     (define-key cider-repl-mode-map (kbd "M-p") 'cider-repl-backward-input)
     (define-key cider-repl-mode-map (kbd "M-n") 'cider-repl-forward-input))
   :bind (("C-c r". cider-repl-reset)))
+
+(add-to-list 'load-path "~/.emacs.d/site-lisp/fennel-mode")
+(use-package fennel-mode)
 
 (use-package go-mode
   :ensure t
@@ -578,6 +586,9 @@ point reaches the beginning or end of the buffer, stop there."
 ;; (use-package gruvbox-theme
 ;;   :ensure t)
 
+;; (use-package leuven-theme
+;;   :ensure t)
+
 (defun dark-theme ()
   (interactive)
   (load-theme 'gruvbox-dark-hard t))
@@ -719,6 +730,16 @@ point reaches the beginning or end of the buffer, stop there."
                                         bibtex-mode))
 
 (setq auto-whitespace-free-modes '(latex-mode plain-tex-mode makefile-gmake-mode))
+
+;; Autocomplete (taken from Purcell's)
+
+(global-set-key (kbd "M-/") 'hippie-expand)
+(setq hippie-expand-try-functions-list
+      '(try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill))
 
 ;; Safe local variables
 (setq safe-local-variable-values '((checkdoc-package-keywords-flag)
