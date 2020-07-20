@@ -9,3 +9,5 @@ projectile.cache
 elpa
 eshell
 *.elc
+network-security.data
+transient/

@@ -1,6 +1,6 @@
 (require 'package)
-(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
@@ -80,9 +80,8 @@
 (use-package elisp-slime-nav
   :ensure t
   :config
-  (progn
-    (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-      (add-hook hook 'elisp-slime-nav-mode))))
+  :hook ((emacs-lisp-mode-hook . elisp-slime-nav-mode)
+         (ielm-mode-hook . elisp-slime-nav-mode)))
 
 (use-package ace-window
   :ensure t
@@ -131,9 +130,7 @@
 
 (use-package eldoc
   :ensure t
-  :init
-  (progn
-    (add-hook 'emacs-lisp-mode-hook (lambda () (eldoc-mode 1)))))
+  :hook ((emacs-lisp-mode-hook . eldoc-mode)))
 
 (use-package fullframe
   :ensure t
@@ -172,11 +169,10 @@
     (smartparens-global-mode 1)
     (sp-pair "'" nil :actions :rem)
     (sp-pair "`" nil :actions :rem)
-    (dolist (hook '(cider-repl-mode-hook
-                    clojure-mode-hook
+    (dolist (hook '(clojure-mode-hook
                     emacs-lisp-mode-hook
-                    list-mode-hook
-                    list-interaction-mode-hook
+                    lisp-mode-hook
+                    lisp-interaction-mode-hook
                     go-mode-hook
                     ruby-mode-hook
                     rust-mode-hook
@@ -201,23 +197,8 @@
             (put-clojure-indent 'select 1)
             (put-clojure-indent 'insert 1)))
 
-(use-package cider
-  :ensure t
-  :defer t
-  :config
-  (progn
-    (add-hook 'cider-mode-hook 'eldoc-mode)
-    (add-hook 'cider-repl-mode-hook #'eldoc-mode)
-    (setq nrepl-hide-special-buffers t)
-    (setq cider-repl-pop-to-buffer-on-connect nil)
-    (setq cider-popup-stacktraces nil)
-    (setq cider-repl-display-help-banner nil)
-    (define-key cider-repl-mode-map (kbd "M-p") 'cider-repl-backward-input)
-    (define-key cider-repl-mode-map (kbd "M-n") 'cider-repl-forward-input))
-  :bind (("C-c r". cider-repl-reset)))
-
-(add-to-list 'load-path "~/.emacs.d/site-lisp/fennel-mode")
-(use-package fennel-mode)
+(use-package fennel-mode
+  :ensure t)
 
 (use-package go-mode
   :ensure t
@@ -233,10 +214,7 @@
 
 (use-package ruby-mode
   :ensure t
-  :defer t
-  :init
-  (progn
-    (add-hook 'ruby-mode-hook '(lambda () (define-key ruby-mode-map "\C-m" 'newline-and-indent)))))
+  :defer t)
 
 (use-package feature-mode
   :ensure t
@@ -297,12 +275,7 @@
 
 (use-package idris-mode
   :ensure t
-  :defer t
-  :init
-  (add-hook 'idris-mode-hook
-            (lambda ()
-              (remove-hook 'before-save-hook 'whitespace-cleanup)
-              (remove-hook 'before-save-hook 'clean-up-buffer-or-region))))
+  :defer t)
 
 (use-package json-mode
   :ensure t)
@@ -314,28 +287,6 @@
 
 (use-package dockerfile-mode
   :ensure t)
-
-(defun enable-dante ()
-  (or (string= (projectile-project-root) "/home/ckoparkar/chai/tree-velocity/")
-      (string= (projectile-project-root) "/home/ckoparkar/chai/fusion-plugin/")
-      ;; (string= (projectile-project-root) "/home/ckoparkar/chai/classes/distributed-systems/")
-      ))
-
-(defun ghc-version ()
-  (cond
-   ((string= (projectile-project-root) "/home/ckoparkar/chai/tree-velocity/") "ghc-8.4.3")
-   ((string= (projectile-project-root) "/home/ckoparkar/chai/fusion-plugin/") "ghc-8.8.2")
-   (t "ghc-8.6.5")))
-
-(use-package dante
-  :ensure t
-  :defer t
-  :init
-  (progn
-    (setq flycheck-error-list-minimum-level 'warning)
-    (add-hook 'dante-mode-hook 'flycheck-mode)
-    (setq dante-repl-command-line `("cabal" "new-repl" "--builddir=dist/dante" "--with-ghc" (ghc-version)))
-    (add-hook 'haskell-mode-hook '(lambda () (when (enable-dante) (dante-mode))))))
 
 (defun haskell-style ()
   "Sets the current buffer to use Haskell Style. Meant to be
@@ -351,15 +302,17 @@
 (use-package haskell-mode
   :ensure t
   :defer t
+  :hook ((haskell-mode-hook . haskell-style))
   :config
   (progn
-    (add-hook 'haskell-mode-hook 'haskell-style)
     (define-key haskell-mode-map (kbd "C-c C-s") nil)
     (setq haskell-ask-also-kill-buffers nil)))
 
 (use-package sml-mode
-  :ensure t
+  :load-path "~/.emacs.d/site-lisp"
   :defer t
+  :mode (("\\.fun\\'" . sml-mode)
+         ("\\.sig\\'" . sml-mode))
   :config (progn
             (setq sml-indent-level 2)
             (setq sml-indent-args 2)
@@ -727,9 +680,9 @@ point reaches the beginning or end of the buffer, stop there."
                                         yaml-mode python-mode rst-mode
                                         coq-mode dockerfile-mode sh-mode
                                         rust-mode conf-toml-mode sml-mode
-                                        bibtex-mode))
+                                        bibtex-mode idris-mode))
 
-(setq auto-whitespace-free-modes '(latex-mode plain-tex-mode makefile-gmake-mode))
+(setq auto-whitespace-free-modes '(latex-mode plain-tex-mode makefile-gmake-mode idris-mode))
 
 ;; Autocomplete (taken from Purcell's)
 
