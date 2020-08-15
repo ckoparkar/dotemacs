@@ -334,6 +334,10 @@
                                    comment-end  "")
                              (smartparens-mode 1)))))
 
+(dolist (hook '(tex-mode-hook latex-mode-hook plain-tex-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode 1))))
+
+
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
@@ -640,6 +644,8 @@ point reaches the beginning or end of the buffer, stop there."
 ;; (load-theme 'gruvbox-light-medium t)
 (set-face-attribute 'default nil :font "Monaco-12")
 
+(set-face-attribute 'region nil :background "#d1d1d1")
+
 (global-hl-line-mode)
 
 (when (eq system-type 'darwin)
@@ -680,7 +686,7 @@ point reaches the beginning or end of the buffer, stop there."
                                         yaml-mode python-mode rst-mode
                                         coq-mode dockerfile-mode sh-mode
                                         rust-mode conf-toml-mode sml-mode
-                                        bibtex-mode idris-mode))
+                                        bibtex-mode idris-mode racket-mode))
 
 (setq auto-whitespace-free-modes '(latex-mode plain-tex-mode makefile-gmake-mode idris-mode))
 
