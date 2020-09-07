@@ -1,13 +1,13 @@
 (require 'package)
-(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
-(setq package-selected-packages '(fullframe leuven-theme fennel-mode yaml-mode use-package undo-tree swiper sml-mode smex smartparens rust-mode restclient racket-mode projectile multiple-cursors markdown-mode magit lua-mode key-chord json-mode idris-mode ido-vertical-mode highlight-parentheses go-mode flx-ido feature-mode expand-region exec-path-from-shell elisp-slime-nav dockerfile-mode discover-my-major dante crux cider cask-mode ace-window gruvbox-theme))
 (require 'use-package)
 (require 'cl)
+
+(setq package-selected-packages '(fullframe leuven-theme fennel-mode yaml-mode use-package undo-tree swiper sml-mode smex smartparens rust-mode restclient racket-mode projectile multiple-cursors markdown-mode magit lua-mode key-chord json-mode idris-mode ido-vertical-mode highlight-parentheses go-mode flx-ido feature-mode expand-region exec-path-from-shell elisp-slime-nav dockerfile-mode discover-my-major dante crux cider cask-mode ace-window gruvbox-theme))
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;;;     Packages     ;;;;;;;;;;;;;;;;;;
@@ -712,3 +712,6 @@ point reaches the beginning or end of the buffer, stop there."
 (put 'narrow-to-region 'disabled nil)
 (setq indent-tabs-mode nil)
 (blink-cursor-mode 0)
+
+;; Important for OSX
+(setq mac-command-modifier 'control)
