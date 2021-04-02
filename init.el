@@ -639,11 +639,10 @@ point reaches the beginning or end of the buffer, stop there."
 (responsible-whitespace)
 
 ;; Theme
-;; (load-theme 'default-black t)
 ;; (load-theme 'gruvbox-dark-hard t)
 ;; (load-theme 'gruvbox-light-medium t)
-(set-face-attribute 'default nil :font "Monaco-12")
-
+;; (set-face-attribute 'default nil :font "Monaco-14")
+(set-face-attribute 'default nil :font "Iosevka-16" :width 'expanded)
 (set-face-attribute 'region nil :background "#d1d1d1")
 
 (global-hl-line-mode)
