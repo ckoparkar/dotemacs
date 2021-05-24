@@ -297,19 +297,16 @@
         haskell-indentation-left-offset 4
         haskell-indentation-starter-offset 4
         haskell-indentation-where-pre-offset 2
-        haskell-indentation-where-post-offset 2)
-  (setq-local comment-start "{-")
-  (setq-local comment-end "-}")
-  (setq-local comment-style 'extra-line))
+        haskell-indentation-where-post-offset 2))
 
 (use-package haskell-mode
   :ensure t
   :defer t
+  :hook ((haskell-mode-hook . haskell-style))
   :config
   (progn
     (define-key haskell-mode-map (kbd "C-c C-s") nil)
-    (setq haskell-ask-also-kill-buffers nil)
-    (add-hook 'haskell-mode-hook (lambda () (haskell-style)))))
+    (setq haskell-ask-also-kill-buffers nil)))
 
 (use-package sml-mode
   :load-path "~/.emacs.d/site-lisp"
@@ -320,9 +317,6 @@
             (setq sml-indent-level 2)
             (setq sml-indent-args 2)
             (setq indent-tabs-mode nil)))
-
-(use-package tuareg
-  :ensure t)
 
 (use-package cc-mode
   :ensure t
