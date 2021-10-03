@@ -685,7 +685,8 @@ point reaches the beginning or end of the buffer, stop there."
                                         yaml-mode python-mode rst-mode
                                         coq-mode dockerfile-mode sh-mode
                                         rust-mode conf-toml-mode sml-mode
-                                        bibtex-mode idris-mode racket-mode))
+                                        bibtex-mode idris-mode racket-mode
+                                        mhtml-mode))
 
 (setq auto-whitespace-free-modes '(latex-mode plain-tex-mode makefile-gmake-mode idris-mode))
 
@@ -713,4 +714,4 @@ point reaches the beginning or end of the buffer, stop there."
 (blink-cursor-mode 0)
 
 ;; Important for OSX
-(setq mac-command-modifier 'control)
+(setq mac-command-modifier 'meta)
