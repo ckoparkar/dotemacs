@@ -540,20 +540,6 @@ point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-;; (use-package gruvbox-theme
-;;   :ensure t)
-
-;; (use-package leuven-theme
-;;   :ensure t)
-
-(defun dark-theme ()
-  (interactive)
-  (load-theme 'gruvbox-dark-hard t))
-
-(defun light-theme ()
-  (interactive)
-  (disable-theme 'gruvbox-dark-hard))
-
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;;     Keybindings     ;;;;;;;;;;;;;;;;
 ;; --------------------------------------------------
@@ -625,9 +611,6 @@ point reaches the beginning or end of the buffer, stop there."
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
 
-;; Remap left-command key to alt in mac
-(setq ns-command-modifier 'meta)
-
 ;; Set auto-scroll off in shell mode
 (remove-hook 'comint-output-filter-functions
              'comint-postoutput-scroll-to-bottom)
@@ -639,9 +622,6 @@ point reaches the beginning or end of the buffer, stop there."
 (responsible-whitespace)
 
 ;; Theme
-;; (load-theme 'gruvbox-dark-hard t)
-;; (load-theme 'gruvbox-light-medium t)
-;; (set-face-attribute 'default nil :font "Monaco-14")
 (set-face-attribute 'default nil :font "Iosevka-16" :width 'expanded)
 (set-face-attribute 'region nil :background "#d1d1d1")
 
@@ -715,3 +695,4 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; Important for OSX
 (setq mac-command-modifier 'meta)
+(setq ns-command-modifier 'meta)
