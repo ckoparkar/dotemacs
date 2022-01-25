@@ -224,9 +224,8 @@
 (use-package rust-mode
   :ensure t
   :defer t
-  :hook ((rust-mode . lsp)
-         (rust-mode . flycheck-mode))
-  :config (progn (setq lsp-prefer-flymake nil)))
+  :config (progn (setq lsp-prefer-flymake nil)
+                 (setq rust-format-on-save t)))
 
 (use-package lua-mode
   :ensure t
