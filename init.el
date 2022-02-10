@@ -7,7 +7,7 @@
 (require 'use-package)
 (require 'cl)
 
-(setq package-selected-packages '(fullframe leuven-theme fennel-mode yaml-mode use-package undo-tree swiper sml-mode smex smartparens rust-mode restclient racket-mode projectile multiple-cursors markdown-mode magit lua-mode key-chord json-mode idris-mode ido-vertical-mode highlight-parentheses go-mode flx-ido feature-mode expand-region exec-path-from-shell elisp-slime-nav dockerfile-mode discover-my-major dante crux cider cask-mode ace-window gruvbox-theme))
+(setq package-selected-packages '(fullframe fennel-mode yaml-mode use-package undo-tree swiper sml-mode smex smartparens rust-mode restclient racket-mode projectile multiple-cursors markdown-mode magit lua-mode key-chord json-mode idris-mode ido-vertical-mode highlight-parentheses go-mode flx-ido feature-mode expand-region exec-path-from-shell elisp-slime-nav dockerfile-mode discover-my-major dante crux cider cask-mode ace-window gruvbox-theme))
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;;;     Packages     ;;;;;;;;;;;;;;;;;;
@@ -543,6 +543,17 @@ point reaches the beginning or end of the buffer, stop there."
   "Open my init.el file."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
+
+(use-package gruvbox-theme
+  :ensure t)
+
+(defun dark-theme ()
+  (interactive)
+  (load-theme 'gruvbox-dark-hard t))
+
+(defun light-theme ()
+  (interactive)
+  (disable-theme 'gruvbox-dark-hard))
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;;     Keybindings     ;;;;;;;;;;;;;;;;
