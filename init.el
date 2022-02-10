@@ -137,6 +137,11 @@
   :config (progn
             (fullframe magit-status magit-mode-quit-window)))
 
+(use-package fill-column-indicator
+  :ensure t
+  :config (progn (setq fci-rule-color "black")
+                 (setq fci-rule-column 80)))
+
 ;; managing parens
 
 (use-package highlight-parentheses
@@ -181,7 +186,9 @@
                     racket-repl-mode-hook
                     racket-mode-hook
                     agda2-mode-hook
-                    fennel-mode))
+                    fennel-mode
+                    rust-mode-hook
+                    c-mode-hook))
       (add-hook hook (lambda () (smartparens-strict-mode 1))))))
 
 ;; major modes
@@ -322,16 +329,14 @@
   :defer t
   :config
   (progn
-    ;; C/C++ mode settings
     (setq-default c-basic-offset 4 c-default-style "linux")
-    ;; (setq-default tab-width 4 indent-tabs-mode t)
     (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
-    (setq mf--source-file-extension "cpp")
-    (add-hook 'c++-mode-hook (lambda () (smartparens-mode 1)))
     (add-hook 'c-mode-hook (lambda ()
                              (setq comment-start "//"
-                                   comment-end  "")
-                             (smartparens-mode 1)))))
+                                   comment-end   "")
+                             (google-set-c-style)
+                             (put 'c-electric-paren 'delete-selection nil)
+                             (put 'c-electric-brace 'delete-selection nil)))))
 
 (dolist (hook '(tex-mode-hook latex-mode-hook plain-tex-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
