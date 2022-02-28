@@ -14,10 +14,11 @@
 ;; --------------------------------------------------
 
 (defun load-local (file)
-  (load (concat user-emacs-directory file)))
+  (load (concat user-emacs-directory "site-lisp/" file)))
 
 (load-local "iuscheme")
 (load-local "llvm-mode")
+(load-local "google-c-style")
 
 (use-package exec-path-from-shell
   :ensure t
@@ -340,43 +341,6 @@
 
 (dolist (hook '(tex-mode-hook latex-mode-hook plain-tex-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
-
-
-
-;; --------------------------------------------------
-;;;;;;;;;;;;;;;       Agda       ;;;;;;;;;;;;;;;;;;;;
-;; --------------------------------------------------
-
-;; (load-file "/home/ckoparkar/.cabal/share/x86_64-linux-ghc-8.2.2/Agda-2.5.3/emacs-mode/agda2.el")
-
-;; (defvar c-agda-unicode
-;;   '(("\\bn" "ℕ")
-;;     ("\\bb" "𝔹")
-;;     ("\\bl" "𝕃")
-;;     ("\\bs" "S")
-;;     ("\\bt" "T")
-;;     ("\\bv" "𝕍")
-;;     ("\\cv" "O")
-;;     ("\\comp" " ")
-;;     ("\\m" "ÞÑ")
-;;     ("\\om" "ω")))
-
-;; (use-package agda-mode)
-
-;; (custom-set-faces
-;;  '(agda2-highlight-coinductive-constructor-face ((t (:foreground "#aaffcc"))))
-;;  '(agda2-highlight-datatype-face ((t (:foreground "light blue"))))
-;;  '(agda2-highlight-field-face ((t (:foreground "#ff99cc"))))
-;;  '(agda2-highlight-function-face ((t (:foreground "#66ccff"))))
-;;  '(agda2-highlight-inductive-constructor-face ((t (:foreground "#ccffaa"))))
-;;  '(agda2-highlight-keyword-face ((t (:foreground "#ffaa00"))))
-;;  '(agda2-highlight-module-face ((t (:foreground "#ffaaff"))))
-;;  '(agda2-highlight-number-face ((t (:foreground "light green"))))
-;;  '(agda2-highlight-postulate-face ((t (:foreground "#ff7766"))))
-;;  '(agda2-highlight-primitive-face ((t (:foreground "#66ccff"))))
-;;  '(agda2-highlight-primitive-type-face ((t (:foreground "light blue"))))
-;;  '(agda2-highlight-record-face ((t (:foreground "light blue"))))
-;;  '(agda2-highlight-string-face ((t (:foreground "#aaffff")))))
 
 
 ;; --------------------------------------------------
