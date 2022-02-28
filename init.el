@@ -640,17 +640,6 @@ point reaches the beginning or end of the buffer, stop there."
 (set-face-attribute 'default nil :font "Iosevka-16" :width 'expanded)
 (set-face-attribute 'region nil :background "#d1d1d1")
 
-(global-hl-line-mode)
-
-(when (eq system-type 'darwin)
-  (exec-path-from-shell-initialize))
-
-(mapc
- (lambda (mode)
-   (when (fboundp mode)
-     (funcall mode -1)))
- '(menu-bar-mode tool-bar-mode scroll-bar-mode))
-
 ;; Setting up Unicode
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
@@ -700,6 +689,14 @@ point reaches the beginning or end of the buffer, stop there."
                                    (bug-reference-bug-regexp . "#\\(?2:[[:digit:]]+\\)")
                                    (buffer-file-coding-system . utf-8-unix)))
 
+;; Some UI stuff
+(global-hl-line-mode)
+(save-place-mode 1)
+(mapc
+ (lambda (mode)
+   (when (fboundp mode)
+     (funcall mode -1)))
+ '(menu-bar-mode tool-bar-mode scroll-bar-mode))
 (set-default 'indicate-empty-lines t)
 (setq ring-bell-function 'ignore)
 (setq inhibit-startup-message t inhibit-startup-echo-area-message t)
@@ -711,3 +708,5 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Important for OSX
 (setq mac-command-modifier 'meta)
 (setq ns-command-modifier 'meta)
+(when (eq system-type 'darwin)
+  (exec-path-from-shell-initialize))
