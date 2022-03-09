@@ -141,7 +141,10 @@
 (use-package fill-column-indicator
   :ensure t
   :config (progn (setq fci-rule-color "black")
-                 (setq fci-rule-column 80)))
+                 (setq fci-rule-column 80)
+                 (add-hook 'c-mode-hook (lambda () (fci-mode)))
+                 (add-hook 'rust-mode-hook (lambda () (fci-mode)))
+                 (add-hook 'haskell-mode-hook (lambda () (fci-mode)))))
 
 ;; managing parens
 
