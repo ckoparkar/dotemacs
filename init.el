@@ -605,7 +605,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; Theme
 (set-face-attribute 'default nil :font "Iosevka-16" :width 'expanded)
-(set-face-attribute 'region nil :background "#d1d1d1")
+(set-face-attribute 'region nil :background "#b3d7ff")
 
 ;; Setting up Unicode
 (prefer-coding-system 'utf-8)
