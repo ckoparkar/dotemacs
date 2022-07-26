@@ -57,7 +57,7 @@
   :ensure t
   :config
   (progn
-    (define-key magit-file-mode-map (kbd "C-x g") nil)
+    ;; (define-key magit-file-mode-map (kbd "C-x g") nil)
     (setq magit-last-seen-setup-instructions "1.4.0")
     (key-chord-define-global "mg" 'magit-status)))
 
@@ -275,6 +275,8 @@
             (put 'go-on 'racket-indent-function 1)
             (put 'letregion 'racket-indent-function 1)
             (put 'letloc 'racket-indent-function 1)
+            (put 'fn 'racket-indent-function 2)
+            (put 'term 'racket-indent-function 0)
             (put 'letpacked 'racket-indent-function 1)
             (put 'letew 'racket-indent-function 1)
             (put 'letscalar 'racket-indent-function 1)
@@ -604,7 +606,8 @@ point reaches the beginning or end of the buffer, stop there."
 (responsible-whitespace)
 
 ;; Theme
-(set-face-attribute 'default nil :font "Iosevka-16" :width 'expanded)
+;; (set-face-attribute 'default nil :font "Iosevka-16" :width 'expanded)
+(set-face-attribute 'default nil :font "Essential PragmataPro" :height 180)
 (set-face-attribute 'region nil :background "#b3d7ff")
 
 ;; Setting up Unicode
@@ -677,3 +680,14 @@ point reaches the beginning or end of the buffer, stop there."
 (setq ns-command-modifier 'meta)
 (when (eq system-type 'darwin)
   (exec-path-from-shell-initialize))
+
+
+;; --------------------------------------------------
+;;;;;;;;;;;;;;;;   Packages to try   ;;;;;;;;;;;;;;;;
+;; --------------------------------------------------
+
+;; recentf
+;; vertico
+;; ibuffer
+;; diminish
+;; origami
