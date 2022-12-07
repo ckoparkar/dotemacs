@@ -1,5 +1,6 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/") t)
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
@@ -57,7 +58,7 @@
   :ensure t
   :config
   (progn
-    ;; (define-key magit-file-mode-map (kbd "C-x g") nil)
+    (define-key magit-file-mode-map (kbd "C-x g") nil)
     (setq magit-last-seen-setup-instructions "1.4.0")
     (key-chord-define-global "mg" 'magit-status)))
 
@@ -393,6 +394,7 @@ With prefix argument, wrap search query in quotes."
         (cider-mode . "")
         (company-mode . "")
         (elisp-slime-nav-mode . "")
+        (hs-minor-mode . "")
         (lisp-interaction-mode . "λ")
         (clojure-mode . "λ")
         (haskell-mode . ">>=")
@@ -513,16 +515,16 @@ point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-(use-package gruvbox-theme
-  :ensure t)
+;; (use-package gruvbox-theme
+;;   :ensure t)
 
-(defun dark-theme ()
-  (interactive)
-  (load-theme 'gruvbox-dark-hard t))
+;; (defun dark-theme ()
+;;   (interactive)
+;;   (load-theme 'gruvbox-dark-hard t))
 
-(defun light-theme ()
-  (interactive)
-  (disable-theme 'gruvbox-dark-hard))
+;; (defun light-theme ()
+;;   (interactive)
+;;   (disable-theme 'gruvbox-dark-hard))
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;;     Keybindings     ;;;;;;;;;;;;;;;;
