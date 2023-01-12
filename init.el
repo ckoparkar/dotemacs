@@ -58,7 +58,7 @@
   :ensure t
   :config
   (progn
-    (define-key magit-file-mode-map (kbd "C-x g") nil)
+    (define-key magit-mode-map (kbd "C-x g") nil)
     (setq magit-last-seen-setup-instructions "1.4.0")
     (key-chord-define-global "mg" 'magit-status)))
 
@@ -293,10 +293,9 @@
 (use-package json-mode
   :ensure t)
 
-;; (use-package proof-site
-;;   :ensure t
-;;   :defer t
-;;   :config (setq coq-compile-before-require 't))
+(use-package proof-general
+  :ensure t
+  :defer t)
 
 (use-package dockerfile-mode
   :ensure t)
@@ -348,6 +347,9 @@
 (dolist (hook '(tex-mode-hook latex-mode-hook plain-tex-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 
+(use-package nix-mode
+  :ensure t
+  :defer t)
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;;;;     Defuns     ;;;;;;;;;;;;;;;;;;;
