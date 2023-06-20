@@ -71,6 +71,7 @@
   :config (progn
             (define-key undo-tree-map (kbd "C-x u") nil)
             (global-undo-tree-mode)
+            (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
             (key-chord-define-global "uu" 'undo-tree-visualize)))
 
 (use-package flycheck
