@@ -11,6 +11,12 @@
 (setq package-selected-packages '(fullframe fennel-mode yaml-mode use-package undo-tree swiper sml-mode smex smartparens rust-mode restclient racket-mode projectile multiple-cursors markdown-mode magit lua-mode key-chord json-mode idris-mode ido-vertical-mode highlight-parentheses go-mode flx-ido feature-mode expand-region exec-path-from-shell elisp-slime-nav dockerfile-mode discover-my-major dante crux cider cask-mode ace-window gruvbox-theme))
 
 ;; --------------------------------------------------
+;;;;;;;;;;;;;;;;;;     MW stuff    ;;;;;;;;;;;;;;;;;;
+;; --------------------------------------------------
+
+(load "~/chai/mwdotfiles/mw.el")
+
+;; --------------------------------------------------
 ;;;;;;;;;;;;;;;;;     Packages     ;;;;;;;;;;;;;;;;;;
 ;; --------------------------------------------------
 
@@ -72,6 +78,7 @@
             (define-key undo-tree-map (kbd "C-x u") nil)
             (global-undo-tree-mode)
             (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+            (setq undo-tree-auto-save-history nil)
             (key-chord-define-global "uu" 'undo-tree-visualize)))
 
 (use-package flycheck
@@ -145,6 +152,7 @@
   :config (progn (setq fci-rule-color "black")
                  (setq fci-rule-column 80)
                  (add-hook 'c-mode-hook (lambda () (fci-mode)))
+                 (add-hook 'c++-mode-hook (lambda () (fci-mode)))
                  (add-hook 'rust-mode-hook (lambda () (fci-mode)))
                  (add-hook 'haskell-mode-hook (lambda () (fci-mode)))))
 
@@ -344,6 +352,8 @@
                              (google-set-c-style)
                              (put 'c-electric-paren 'delete-selection nil)
                              (put 'c-electric-brace 'delete-selection nil)))))
+
+(use-package lsp-mode)
 
 (dolist (hook '(tex-mode-hook latex-mode-hook plain-tex-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
