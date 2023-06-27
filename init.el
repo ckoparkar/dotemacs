@@ -245,8 +245,7 @@
 (use-package rust-mode
   :ensure t
   :defer t
-  :config (progn (setq lsp-prefer-flymake nil)
-                 (setq rust-format-on-save t)))
+  :config (progn (setq rust-format-on-save t)))
 
 (use-package lua-mode
   :ensure t
@@ -353,7 +352,10 @@
                              (put 'c-electric-paren 'delete-selection nil)
                              (put 'c-electric-brace 'delete-selection nil)))))
 
-(use-package lsp-mode)
+(use-package lsp-mode
+  :config (progn
+            (lsp-headerline-breadcrumb-mode -1)
+            (lsp-modeline-diagnostics-mode -1)))
 
 (dolist (hook '(tex-mode-hook latex-mode-hook plain-tex-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
@@ -361,6 +363,7 @@
 (use-package nix-mode
   :ensure t
   :defer t)
+
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;;;;     Defuns     ;;;;;;;;;;;;;;;;;;;
@@ -528,16 +531,6 @@ point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-;; (use-package gruvbox-theme
-;;   :ensure t)
-
-;; (defun dark-theme ()
-;;   (interactive)
-;;   (load-theme 'gruvbox-dark-hard t))
-
-;; (defun light-theme ()
-;;   (interactive)
-;;   (disable-theme 'gruvbox-dark-hard))
 
 ;; --------------------------------------------------
 ;;;;;;;;;;;;;;;;     Keybindings     ;;;;;;;;;;;;;;;;
